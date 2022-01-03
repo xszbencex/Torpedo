@@ -17,8 +17,6 @@ namespace Torpedo.Model
         public int Y { get; set; }
 
         public int X { get; set; }
-
-
         public Vector(int x, int y)
         {
             this.X = x;
@@ -40,6 +38,5 @@ namespace Torpedo.Model
             return new Vector(a.X + b.X, a.Y + b.Y);
         }
     }
-#pragma warning restore LRT001 // There is only one restricted namespace
-}
 
+}

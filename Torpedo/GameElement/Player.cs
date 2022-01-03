@@ -9,10 +9,14 @@ namespace Torpedo.GameElement
 {
     public abstract class Player
     {
+        public Player()
+        {
+
+        }
         public string? Name { get; set; }
         public List<ShipPart>? ShipsCoordinate { get; set; }
-
+        public List<FiredShot> FiredShots { get; set; }
         public abstract void PutDownAllShip();
-        public abstract void TakeAShot();
+        public abstract Vector TakeAShot();
     }
 }

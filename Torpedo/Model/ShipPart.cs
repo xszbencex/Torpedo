@@ -10,6 +10,6 @@ namespace Torpedo.Model
     public class ShipPart
     {
         public Vector? Coordinate { get; set; }
-        public bool Destroyed { get; set; }
+        public bool Destroyed { get; set; } = false;
     }
 }
