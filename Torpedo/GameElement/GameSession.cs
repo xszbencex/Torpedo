@@ -34,7 +34,7 @@ namespace Torpedo.GameElement
             {
                 otherPlayer = Player1;
             }
-            try
+            try//Nem vagyok benne biztos hogy működik
             {
                 otherPlayer.ShipsCoordinate.Where(s => s.Coordinate == LastShot).Single().Destroyed = true;
                 ActualPlayer.FiredShots.Add(new FiredShot(LastShot, true));
