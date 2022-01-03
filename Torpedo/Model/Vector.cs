@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Torpedo.Model
 {
-    struct Vector
+
+    public struct Vector
     {
         public static readonly Vector Up = new Vector(0, -1);
         public static readonly Vector Down = new Vector(0, 1);
@@ -39,5 +40,6 @@ namespace Torpedo.Model
             return new Vector(a.X + b.X, a.Y + b.Y);
         }
     }
+#pragma warning restore LRT001 // There is only one restricted namespace
 }
 
