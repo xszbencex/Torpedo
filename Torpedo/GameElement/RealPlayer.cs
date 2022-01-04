@@ -10,6 +10,10 @@ namespace Torpedo.GameElement
 {
     public class RealPlayer : Player
     {
+        public RealPlayer(IInput input, string name) : base(input, name)
+        {
+        }
+
         public override void PutDownAllShip()
         {
             foreach (int length in MainSettings.PlayableShipsLength)
@@ -40,7 +44,7 @@ namespace Torpedo.GameElement
         /// <exception cref="NotImplementedException"></exception>
         private Vector[] GetNewShipPosition(int length)
         {
-            throw new NotImplementedException();
+            return _input.GetNewShipPosition(length);
         }
         /// <summary>
         /// decides whether the position for the given Ship length is correct
@@ -50,13 +54,24 @@ namespace Torpedo.GameElement
         /// <returns>true if positon is correct and false otherwise</returns>
         private bool IsShipPositionValid(Vector[] position, int length)
         {
-            if (MainSettings.CoordinateValidation(position[0]))
+            if (!MainSettings.CoordinateValidation(position[0]))
             {
                 return false;
             }
             Vector endOfTheShip = position[0] + (position[1] * length);
 
-            return MainSettings.CoordinateValidation(endOfTheShip);
+            if (!MainSettings.CoordinateValidation(endOfTheShip))
+            {
+                return false;
+            }
+            for (int i = 0; i < length; i++)
+            {
+                if (this.ShipsCoordinate.Exists(s => s.Coordinate == (position[0] + (position[1] * i))))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

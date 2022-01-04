@@ -9,9 +9,17 @@ namespace Torpedo.GameElement
 {
     public abstract class Player
     {
-        public string? Name { get; set; }
-        public List<ShipPart>? ShipsCoordinate { get; set; } = new List<ShipPart>();
-        public List<FiredShot> FiredShots { get; set; } = new List<FiredShot>();
+        protected Player(IInput input, string name)
+        {
+            _input = input;
+            this.Name = name;
+            this.ShipsCoordinate = new List<ShipPart>();
+            this.FiredShots = new List<FiredShot>();
+        }
+        private protected IInput _input;
+        public string Name { get; set; }
+        public List<ShipPart> ShipsCoordinate { get; set; }
+        public List<FiredShot> FiredShots { get; set; }
         public abstract void PutDownAllShip();
         public abstract Vector TakeAShot();
     }
