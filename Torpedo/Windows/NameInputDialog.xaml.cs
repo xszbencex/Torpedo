@@ -10,19 +10,28 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Torpedo
+namespace Torpedo.Windows
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for NameInputDialog.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class NameInputDialog : Window
     {
-        public MainWindow()
+        public NameInputDialog()
         {
             InitializeComponent();
+        }
+
+        private void OnCancel(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void OnDone(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }
