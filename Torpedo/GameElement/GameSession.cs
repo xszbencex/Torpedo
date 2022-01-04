@@ -9,9 +9,9 @@ namespace Torpedo.GameElement
 {
     public class GameSession
     {
-        public Player? Player1 { get; set; }
-        public Player? Player2 { get; set; }
-        public Player? ActualPlayer { get; set; }
+        public Player Player1 { get; set; }
+        public Player Player2 { get; set; }
+        public Player ActualPlayer { get; set; }
         public bool GameOver { get; set; }
         public int Winner { get; set; }
         public Vector LastShot { get; set; }

@@ -9,6 +9,12 @@ namespace Torpedo.Model
 {
     public class ShipPart
     {
+        public ShipPart(Vector? coordinate)
+        {
+            this.Coordinate = coordinate;
+            this.Destroyed = false;
+        }
+
         public Vector? Coordinate { get; set; }
         public bool Destroyed { get; set; } = false;
     }
