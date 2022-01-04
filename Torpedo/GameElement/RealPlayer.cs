@@ -23,7 +23,7 @@ namespace Torpedo.GameElement
                 {
                     position = GetNewShipPosition(length);
                 }
-                while (IsShipPositionValid(position, length));
+                while (!IsShipPositionValid(position, length));
                 for (int i = 0; i < length; i++)
                 {
                     this.ShipsCoordinate.Add(new ShipPart(position[0] + (position[1] * i)));
