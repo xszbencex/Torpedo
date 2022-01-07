@@ -19,6 +19,7 @@ namespace Torpedo.GameElement
         public void PuttDownTheShips()
         {
             Player1.PutDownAllShip();
+
             Player2.PutDownAllShip();
         }
 

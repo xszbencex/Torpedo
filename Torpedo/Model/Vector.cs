@@ -42,6 +42,18 @@ namespace Torpedo.Model
         {
             return new Vector(a.X * b, a.Y * b);
         }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is Vector vector &&
+                   this.Y == vector.Y &&
+                   this.X == vector.X;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(this.Y, this.X);
+        }
     }
 
 }
