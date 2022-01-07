@@ -10,7 +10,7 @@ namespace Torpedo.GameElement
 {
     public class RealPlayer : Player
     {
-        public RealPlayer(IInput input, string name) : base(input, name)
+        public RealPlayer(string name) : base(name)
         {
         }
 
@@ -29,6 +29,11 @@ namespace Torpedo.GameElement
                     this.ShipsCoordinate.Add(new ShipPart(position[0] + (position[1] * i)));
                 }
             }
+        }
+
+        public override void PutDownAShip(Vector shipStartPoint, Vector shipEndPoint)
+        {
+            throw new NotImplementedException();
         }
 
         public override Vector TakeAShot()
