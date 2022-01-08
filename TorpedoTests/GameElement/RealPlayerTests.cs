@@ -59,6 +59,7 @@ namespace Torpedo.GameElement.Tests
         }
 
         [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
         public void PutDownAShip_PutShipDownWhatHasSameCoordinateWhitAnotherShip_ThrowExeption()
         {
             // Arrange
@@ -73,15 +74,11 @@ namespace Torpedo.GameElement.Tests
             player.PutDownAShip(shipStartPoint, shipEndPoint);
 
             // Act
-
+            player.PutDownAShip(new Vector(1, 3), new Vector(5, 3));
 
             // Assert
-
-            Assert.IsTrue(expected.All(player.ShipsCoordinate.Contains) && (expected.Count == player.ShipsCoordinate.Count));
-            Assert.AreEqual(player.ShipCount, 1);
+            Assert.Fail();
         }
-
-
 
         [TestMethod()]
         public void GetShipParts_Up()
