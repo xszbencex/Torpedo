@@ -14,69 +14,48 @@ namespace Torpedo.GameElement
         {
         }
 
-        public override void PutDownAllShip()
-        {
-            foreach (int length in MainSettings.PlayableShipsLength)
-            {
-                Vector[] position;
-                do
-                {
-                    position = GetNewShipPosition(length);
-                }
-                while (!IsShipPositionValid(position, length));
-                for (int i = 0; i < length; i++)
-                {
-                    this.ShipsCoordinate.Add(new ShipPart(position[0] + (position[1] * i)));
-                }
-            }
-        }
-
         public override void PutDownAShip(Vector shipStartPoint, Vector shipEndPoint)
         {
-            throw new NotImplementedException();
+            List<ShipPart> newShipParts = GetShipParts(shipStartPoint, shipEndPoint);
+            if (newShipParts.Any(ShipsCoordinate.Contains))
+            {
+                throw new ArgumentException("Hajók Ütköznek");
+            }
+            ShipsCoordinate.AddRange(newShipParts);
+            ShipCount = ShipCount + 1;
         }
-
         public override Vector TakeAShot()
         {
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Get a Ship position
-        /// </summary>
-        /// <param name="length"> int The ship lenght</param>
-        /// <returns>Vector[] 0. elemnt is the Ship start point 1. elment is the direction of the ship</returns>
-        /// <exception cref="NotImplementedException"></exception>
-        private Vector[] GetNewShipPosition(int length)
+        public List<ShipPart> GetShipParts(Vector shipStartPoint, Vector shipEndPoint)
         {
-            return _input.GetNewShipPosition(length);
-        }
-        /// <summary>
-        /// decides whether the position for the given Ship length is correct
-        /// </summary>
-        /// <param name="position">Vector[] 0. elemnt is the Ship start point 1. elment is the direction of the ship</param>
-        /// <param name="length">The length of the Ship</param>
-        /// <returns>true if positon is correct and false otherwise</returns>
-        private bool IsShipPositionValid(Vector[] position, int length)
-        {
-            if (!MainSettings.CoordinateValidation(position[0]))
-            {
-                return false;
-            }
-            Vector endOfTheShip = position[0] + (position[1] * length);
+            List<ShipPart> shipParts = new List<ShipPart>();
+            Vector vector = Norm(shipEndPoint - shipStartPoint);
+            shipParts.Add(new ShipPart(shipEndPoint));
+            shipParts.Add(new ShipPart(shipStartPoint));
 
-            if (!MainSettings.CoordinateValidation(endOfTheShip))
+            while (!shipParts.Contains(new ShipPart(shipParts.Last().Coordinate + vector)))
             {
-                return false;
+                shipParts.Add(new ShipPart( shipParts.Last().Coordinate + vector));
             }
-            for (int i = 0; i < length; i++)
+
+            return shipParts;
+        }
+
+        private  Vector Norm(Vector a)
+        {
+            Vector actual = new Vector(a.X, a.Y);
+            if (actual.Y != 0)
             {
-                if (this.ShipsCoordinate.Exists(s => s.Coordinate == (position[0] + (position[1] * i))))
-                {
-                    return false;
-                }
+                actual.Y = actual.Y / Math.Abs(actual.Y);
             }
-            return true;
+            if (actual.X != 0)
+            {
+                actual.X = actual.X / Math.Abs(actual.X);
+            }
+            return actual;
         }
     }
 }

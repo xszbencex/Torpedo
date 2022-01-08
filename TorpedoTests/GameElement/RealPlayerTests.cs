@@ -13,11 +13,95 @@ namespace Torpedo.GameElement.Tests
     [TestClass()]
     public class RealPlayerTests
     {
+       
+
         [TestMethod()]
-        public void RealPlayerTest()
+        public void GetShipParts_Down()
         {
-            throw new NotImplementedException();
-            Assert.Fail();
+            // Arrange
+            Vector shipStartPoint = new Vector(1, 2);
+            Vector shipEndPoint = new Vector(1, 5);
+            List<ShipPart> expected = new List<ShipPart>();
+            expected.Add(new ShipPart(new Vector(1, 5)));
+            expected.Add(new ShipPart(new Vector(1, 2)));
+            expected.Add(new ShipPart(new Vector(1, 3)));
+            expected.Add(new ShipPart(new Vector(1, 4)));
+            RealPlayer player = new RealPlayer("test");
+
+            // Act
+            var actual = player.GetShipParts(shipStartPoint, shipEndPoint);
+
+            // Assert
+            Assert.IsTrue(expected.All(actual.Contains) && (expected.Count == actual.Count));
+
+        }
+
+        [TestMethod()]
+        public void PutDownAShip_PutFirstShipDown_TheShipPartsWillBeInTheShipsCoordinate()
+        {
+            // Arrange
+            Vector shipStartPoint = new Vector(1, 2);
+            Vector shipEndPoint = new Vector(1, 5);
+            List<ShipPart> expected = new List<ShipPart>();
+            expected.Add(new ShipPart(new Vector(1, 5)));
+            expected.Add(new ShipPart(new Vector(1, 2)));
+            expected.Add(new ShipPart(new Vector(1, 3)));
+            expected.Add(new ShipPart(new Vector(1, 4)));
+            RealPlayer player = new RealPlayer("test");
+
+            // Act
+            player.PutDownAShip(shipStartPoint, shipEndPoint);
+
+            // Assert
+
+            Assert.IsTrue(expected.All(player.ShipsCoordinate.Contains) && (expected.Count == player.ShipsCoordinate.Count));
+            Assert.AreEqual(player.ShipCount, 1);
+        }
+
+        [TestMethod()]
+        public void PutDownAShip_PutShipDownWhatHasSameCoordinateWhitAnotherShip_ThrowExeption()
+        {
+            // Arrange
+            Vector shipStartPoint = new Vector(1, 2);
+            Vector shipEndPoint = new Vector(1, 5);
+            List<ShipPart> expected = new List<ShipPart>();
+            expected.Add(new ShipPart(new Vector(1, 5)));
+            expected.Add(new ShipPart(new Vector(1, 2)));
+            expected.Add(new ShipPart(new Vector(1, 3)));
+            expected.Add(new ShipPart(new Vector(1, 4)));
+            RealPlayer player = new RealPlayer("test");
+            player.PutDownAShip(shipStartPoint, shipEndPoint);
+
+            // Act
+
+
+            // Assert
+
+            Assert.IsTrue(expected.All(player.ShipsCoordinate.Contains) && (expected.Count == player.ShipsCoordinate.Count));
+            Assert.AreEqual(player.ShipCount, 1);
+        }
+
+
+
+        [TestMethod()]
+        public void GetShipParts_Up()
+        {
+            // Arrange
+            Vector shipStartPoint = new Vector(1, 5);
+            Vector shipEndPoint = new Vector(1, 2);
+            List<ShipPart> expected = new List<ShipPart>();
+            expected.Add(new ShipPart(new Vector(1, 5)));
+            expected.Add(new ShipPart(new Vector(1, 2)));
+            expected.Add(new ShipPart(new Vector(1, 3)));
+            expected.Add(new ShipPart(new Vector(1, 4)));
+            RealPlayer player = new RealPlayer("test");
+
+            // Act
+            var actual = player.GetShipParts(shipStartPoint, shipEndPoint);
+
+            // Assert
+            Assert.IsTrue(expected.All(actual.Contains) && (expected.Count == actual.Count));
+
         }
 
         /*
@@ -94,11 +178,6 @@ namespace Torpedo.GameElement.Tests
             Assert.IsTrue(expected.All(player.ShipsCoordinate.Contains) && (expected.Count == player.ShipsCoordinate.Count));
         }*/
 
-        [TestMethod()]
-        public void TakeAShotTest()
-        {
-            throw new NotImplementedException();
-            Assert.Fail();
-        }
+        
     }
 }

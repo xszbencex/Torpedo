@@ -181,7 +181,6 @@ namespace Torpedo.Windows
                     MessageBox.Show(ex.Message);
                 }
             }
-
         }
 
         private void HandleShot(Vector vectorOfClick)
