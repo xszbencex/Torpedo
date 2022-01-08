@@ -11,11 +11,11 @@
         SizeToContent="WidthAndHeight"
         KeyUp="WindowKeyUp">
     <Grid>
-        <Grid Visibility="Hidden" Name="startingPageGrid" Width="600" Height="400" >
+        <Grid Visibility="Visible" Name="startingPageGrid" Width="600" Height="400" >
             <Button Content="Start Game" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-140,0,0,0" Width="117" Height="40" FontSize="20" Click="Start_Click"/>
             <Button Content="Scores" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="140,0,0,0" Width="117" Height="40" FontSize="20" Click="Scores_Click"/>
         </Grid>
-        <Grid Visibility="Visible" Name="gamePageGrid">
+        <Grid Visibility="Hidden" Name="gamePageGrid">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"></RowDefinition>
                 <RowDefinition Height="8*"></RowDefinition>

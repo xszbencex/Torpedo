@@ -53,7 +53,7 @@ namespace Torpedo.Windows
         public MainWindow()
         {
             InitializeComponent();
-            DummyInitializeGame();
+            // DummyInitializeGame();
         }
 
         private void Start_Click(object sender, RoutedEventArgs e)
