@@ -12,9 +12,19 @@ namespace Torpedo.GameElement
         public Player Player1 { get; set; }
         public Player Player2 { get; set; }
         public Player ActualPlayer { get; set; }
+        public bool IsPuttingDownPhase { get; set; }
+        public Vector? ShipStartPoint { get; set; }
         public bool GameOver { get; set; }
         public int Winner { get; set; }
         public Vector LastShot { get; set; }
+
+        public GameSession(Player player1, Player player2, Player actualPlayer)
+        {
+            this.Player1 = player1;
+            this.Player2 = player2;
+            this.ActualPlayer = actualPlayer;
+            this.IsPuttingDownPhase = false;
+        }
 
         public void PuttDownTheShips()
         {
@@ -23,8 +33,17 @@ namespace Torpedo.GameElement
             Player2.PutDownAllShip();
         }
 
-        public void ActualPlayerTakeAShot()
+        public void ActualPlayerPutsDownShip(Vector shipStartPoint, Vector shipEndPoint)
         {
+            // TODO actual player PutDownShip-jét meghívni,
+            // ha lerakta az összeset, akkor váltani az actual playert a másikra
+            // ha a másik is lerakta az összeset vagy ha az enemy AI akkor hívni a PutAllDown-t és
+            // IsPuttingDownPhase = false-ra állítása
+        }
+
+        public void ActualPlayerTakeAShot(Vector shotPoint)
+        {
+            // TODO shotPoint kezelése, azzal kell hívni az actual player TakeAShot-ját
             LastShot = ActualPlayer.TakeAShot();
             Player otherPlayer;
             if (ActualPlayer.Equals(Player1))

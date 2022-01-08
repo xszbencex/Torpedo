@@ -9,7 +9,7 @@ namespace Torpedo.Model
 {
     public class ShipPart
     {
-        public ShipPart(Vector? coordinate)
+        public ShipPart(Vector? coordinate) // TODO nem biztos, hogy kell a ?
         {
             this.Coordinate = coordinate;
             this.Destroyed = false;

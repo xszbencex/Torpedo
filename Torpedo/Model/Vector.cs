@@ -45,14 +45,19 @@ namespace Torpedo.Model
 
         public override bool Equals(object? obj)
         {
-            return obj is Vector vector &&
-                   this.Y == vector.Y &&
-                   this.X == vector.X;
+            return obj is Vector vector
+                && this.Y == vector.Y
+                && this.X == vector.X;
         }
 
         public override int GetHashCode()
         {
             return HashCode.Combine(this.Y, this.X);
+        }
+
+        public override string ToString()
+        {
+            return $"X: {this.X}, Y: {this.Y}";
         }
     }
 

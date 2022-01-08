@@ -14,4 +14,6 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Correctness", "LRT001:There is only one restricted namespace", Justification = "<Pending>", Scope = "type", Target = "~T:Torpedo.Settings.MainSettings")]
 [assembly: SuppressMessage("Correctness", "LRT001:There is only one restricted namespace", Justification = "<Pending>", Scope = "type", Target = "~T:Torpedo.GameElement.IInput")]
 [assembly: SuppressMessage("Correctness", "LRT001:There is only one restricted namespace", Justification = "<Pending>", Scope = "type", Target = "~T:Torpedo.GameElement.DummyInput")]
+[assembly: SuppressMessage("Correctness", "LRT001:There is only one restricted namespace", Justification = "<Pending>", Scope = "type", Target = "~T:Torpedo.Windows.NameInputDialog")]
+[assembly: SuppressMessage("Correctness", "LRT001:There is only one restricted namespace", Justification = "<Pending>", Scope = "type", Target = "~T:Torpedo.GameElement.AIPlayer")]
 [assembly: SuppressMessage("Correctness", "LRT001:There is only one restricted namespace", Justification = "<Pending>", Scope = "type", Target = "~T:Torpedo.Windows.MainWindow")]

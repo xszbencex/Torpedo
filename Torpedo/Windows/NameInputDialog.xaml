@@ -10,36 +10,33 @@
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
-                <RowDefinition />
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0" HorizontalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="150"/>
-                </Grid.ColumnDefinitions>
+            <StackPanel HorizontalAlignment="Center" Grid.Row="0" Orientation="Horizontal">
                 <Label Grid.Column="0" Content="Player 1" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Margin="0,0,10,0"/>
-                <TextBox Grid.Column="1" Name="playerOneText" Height="30" VerticalContentAlignment="Center"/>
-            </Grid>
+                <TextBox Grid.Column="1" Name="playerOneText" Height="30" VerticalContentAlignment="Center" Width="150"/>
+            </StackPanel>
 
-            <Grid Grid.Row="1" HorizontalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="150"/>
-                </Grid.ColumnDefinitions>
+            <StackPanel HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center">
+                <CheckBox Name="isBotCheckbox" IsChecked="True" Checked="OnBotChecked" Unchecked="OnBotUnChecked">Play with a Bot</CheckBox>
+            </StackPanel>
+            
+            <StackPanel HorizontalAlignment="Center" Grid.Row="2" Orientation="Horizontal" Opacity="0.5" Name="playerTwoContainer">
                 <Label Grid.Column="0" Content="Player 2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20" Margin="0,0,10,0"/>
-                <TextBox Grid.Column="1" Name="playerTwoText" Height="30" VerticalContentAlignment="Center"/>
-            </Grid>
+                <TextBox Grid.Column="1" Name="playerTwoText" Height="30" VerticalContentAlignment="Center" Width="150" IsEnabled="False"/>
+            </StackPanel>
 
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Content="Cancel" Click="OnCancel" Margin="15" FontSize="14"/>
-                <Button Grid.Column="1" Content="Start" Click="OnDone" Margin="15" FontSize="14"/>
+                <Button Grid.Column="0" Content="Cancel" Click="OnCancel" Margin="7" FontSize="14"/>
+                <Button Grid.Column="1" Content="Start" Click="OnDone" Margin="7" FontSize="14"/>
             </Grid>
 
         </Grid>
