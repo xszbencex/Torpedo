@@ -59,6 +59,13 @@ namespace Torpedo.GameElement
                 desirableTarget.Add(s.Coordinate + Vector.Right);
                 desirableTarget.Add(s.Coordinate + Vector.Left);
             });
+
+            // Nincs Test
+            desirableTarget = desirableTarget.Where(s => MainSettings.CoordinateValidation(s)).ToList();
+
+            // Nincs Test
+            desirableTarget = desirableTarget.Where(s => !FiredShots.Contains(new FiredShot(s, true))).ToList();
+
             if (desirableTarget.Count != 0)
             {
                 return desirableTarget[random.Next(desirableTarget.Count)];
