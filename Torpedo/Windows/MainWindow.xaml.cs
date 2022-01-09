@@ -117,6 +117,7 @@ namespace Torpedo.Windows
             this.Player2Hits = _gameSession.Player2.FiredShots.FindAll(shot => shot.Hit).Count;
             this.ActualPlayerName = _gameSession.ActualPlayer.Name;
             this.ActualPhase = _gameSession.IsPuttingDownPhase ? "Putting down" : "Shooting";
+            // TODO next ship size MainSettings.PlayableShipsLength[_gameSession.ActualPlaer.ShipCount]
         }
 
         private void ChangePage()
@@ -149,8 +150,6 @@ namespace Torpedo.Windows
                     field.Height = unitX;
                     Canvas.SetTop(field, unitY * i);
                     Canvas.SetLeft(field, unitX * j);
-                    field.MouseEnter += OnRectangleHover;
-                    field.MouseLeave += OnRectangleLeave;
                     canvas.Children.Add(field);
                 }
             }
@@ -193,21 +192,20 @@ namespace Torpedo.Windows
                 _gameSession.ShipStartPoint = vectorOfClick;
                 Rectangle field = GetRectangleFromVector(vectorOfClick, GetActualPlayerCanvas());
                 field.Fill = MainSettings.ShipColor;
+                SetHoverListeners(GetActualPlayerCanvas());
             }
             else
             {
+                RemoveHoverListeners(GetActualPlayerCanvas());
                 try
                 {
                     _gameSession.ActualPlayerPutsDownShip((Vector)_gameSession.ShipStartPoint, vectorOfClick);
                     RenderState();
-
-                    /// Joci írta bele
                     _gameSession.ShipStartPoint = null;
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
-                    /// Joci írta bele
                     RenderState();
                     _gameSession.ShipStartPoint = null;
                 }
@@ -260,7 +258,7 @@ namespace Torpedo.Windows
         {
             _gameSession.ActualPlayer.ShipsCoordinate.ForEach(shipPart =>
             {
-                GetRectangleFromVector(shipPart.Coordinate.GetValueOrDefault(), GetActualPlayerCanvas()).Fill = MainSettings.ShipColor;
+                GetRectangleFromVector(shipPart.Coordinate, GetActualPlayerCanvas()).Fill = MainSettings.ShipColor;
             });
         }
 
@@ -268,7 +266,7 @@ namespace Torpedo.Windows
         {
             _gameSession.Player2.ShipsCoordinate.ForEach(shipPart =>
             {
-                GetRectangleFromVector(shipPart.Coordinate.GetValueOrDefault(), GetEnemyPlayerCanvas()).Fill = MainSettings.ShipColor;
+                GetRectangleFromVector(shipPart.Coordinate, GetEnemyPlayerCanvas()).Fill = MainSettings.ShipColor;
             });
         }
 
@@ -300,6 +298,26 @@ namespace Torpedo.Windows
             }
         }
 
+        private void SetHoverListeners(Canvas canvas)
+        {
+            foreach (var i in canvas.Children)
+            {
+                var rectangle = (Rectangle)i;
+                rectangle.MouseEnter += OnRectangleHover;
+                rectangle.MouseLeave += OnRectangleLeave;
+            }
+        }
+
+        private void RemoveHoverListeners(Canvas canvas)
+        {
+            foreach (var i in canvas.Children)
+            {
+                var rectangle = (Rectangle)i;
+                rectangle.MouseEnter -= OnRectangleHover;
+                rectangle.MouseLeave -= OnRectangleLeave;
+            }
+        }
+
         private void OnRectangleHover(object sender, MouseEventArgs e)
         {
             if (_gameSession.ShipStartPoint != null)
@@ -311,9 +329,24 @@ namespace Torpedo.Windows
                     var x = Math.Floor(point.X / 30);
                     var y = Math.Floor(point.Y / 30);
                     var vectorOfHover = new Vector((int)x, (int)y);
-                    if (vectorOfHover.Y == _gameSession.ShipStartPoint?.Y || vectorOfHover.X == _gameSession.ShipStartPoint?.X)
+                    var vectorOfShipStart = _gameSession.ShipStartPoint.GetValueOrDefault();
+                    if (vectorOfHover.Y == vectorOfShipStart.Y)
                     {
-                        GetRectangleFromVector(vectorOfHover, (Canvas)rectangle.Parent).Fill = MainSettings.ShipColor;
+                        var smaller = vectorOfHover.X < vectorOfShipStart.X ? vectorOfHover.X :vectorOfShipStart.X;
+                        var bigger = smaller == vectorOfHover.X ? vectorOfShipStart.X : vectorOfHover.X;
+                        for (int i = smaller; i <= bigger; i++)
+                        {
+                            GetRectangleFromVector(new Vector(i, vectorOfHover.Y), GetActualPlayerCanvas()).Fill = MainSettings.ShipColor;
+                        }
+                    }
+                    else if (vectorOfHover.X == vectorOfShipStart.X)
+                    {
+                        var smaller = vectorOfHover.Y < vectorOfShipStart.Y ? vectorOfHover.Y : vectorOfShipStart.Y;
+                        var bigger = smaller == vectorOfHover.Y ? vectorOfShipStart.Y : vectorOfHover.Y;
+                        for (int i = smaller; i <= bigger; i++)
+                        {
+                            GetRectangleFromVector(new Vector(vectorOfHover.X, i), GetActualPlayerCanvas()).Fill = MainSettings.ShipColor;
+                        }
                     }
                 }
             }
