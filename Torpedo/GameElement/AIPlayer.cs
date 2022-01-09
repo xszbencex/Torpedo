@@ -15,10 +15,9 @@ namespace Torpedo.GameElement
         {
         }
 
-
-        public override void PutDownAShip(Vector shipStartPoint, Vector shipEndPoint)
+        public void PutDownAllShip()
         {
-            throw new NotImplementedException();
+
         }
 
         public override Vector TakeAShot()

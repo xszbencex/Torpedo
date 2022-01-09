@@ -56,7 +56,8 @@ namespace Torpedo.GameElement
                 ActualPlayer = GetOtherPlayer();
                 if (ActualPlayer is AIPlayer aI)
                 {
-                    ActualPlayer.PutDownAShip(new Vector(-1, -1), new Vector(-1, -1));
+                    AIPlayer ai = (AIPlayer)ActualPlayer;
+                    ai.PutDownAllShip();
                     IsPuttingDownPhase = false;
                     SecondPhaseInIt();
                 }
@@ -101,7 +102,7 @@ namespace Torpedo.GameElement
 
         private void RegisteringAShot(Vector shotPoint)
         {
-            if (ActualPlayer.FiredShots.Where(f => f.Coordinate ==shotPoint).Any())
+            if (ActualPlayer.FiredShots.Where(f => f.Coordinate == shotPoint).Any())
             {
                 throw new ArgumentException("Odamár lőtél");
             }

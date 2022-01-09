@@ -18,38 +18,74 @@ namespace Torpedo.GameElement
             this.ShipCount = 0;
         }
 
-        public abstract void PutDownAShip(Vector shipStartPoint, Vector shipEndPoint);
         public string Name { get; set; }
         public List<ShipPart> ShipsCoordinate { get; set; }
         public List<FiredShot> FiredShots { get; set; }
         public int ShipCount { get; set; }
         public abstract Vector TakeAShot();
-        /// <summary>
-        /// decides whether the position for the given Ship length is correct
-        /// </summary>
-        /// <param name="position">Vector[] 0. elemnt is the Ship start point 1. elment is the direction of the ship</param>
-        /// <param name="length">The length of the Ship</param>
-        /// <returns>true if positon is correct and false otherwise</returns>
-        /*protected bool IsShipPositionValid(Vector StartOfTheShip, Vector endOfTheShip)
+
+        public void PutDownAShip(Vector shipStartPoint, Vector shipEndPoint)
         {
-            if (!MainSettings.CoordinateValidation(StartOfTheShip))
+            if ((shipStartPoint.X != shipEndPoint.X) && (shipStartPoint.Y != shipEndPoint.Y))
             {
-                return false;
+                throw new ArgumentException("A hajó kezdő és vég pontjának egy sorba vagy oszlopba kell esnie");
+            }
+            System.Diagnostics.Contracts.Contract.EndContractBlock();
+
+            List<ShipPart> newShipParts = GetShipParts(shipStartPoint, shipEndPoint);
+
+            if (newShipParts.Count != MainSettings.PlayableShipsLength[ShipCount])
+            {
+                throw new ArgumentException($"A hajód nem {MainSettings.PlayableShipsLength[ShipCount]} hosszú!");
             }
 
-            if (!MainSettings.CoordinateValidation(endOfTheShip))
+            if (newShipParts.ConvertAll(s => s.Coordinate).Any(GetNotValidCoordinates().Contains))
             {
-                return false;
+                throw new ArgumentException("Ütközés veszély ilyen közel nem raghatsz egymáshoz hajókat");
+            }
+            ShipsCoordinate.AddRange(newShipParts);
+            ShipCount = ShipCount + 1;
+        }
+        public List<ShipPart> GetShipParts(Vector shipStartPoint, Vector shipEndPoint)
+        {
+            List<ShipPart> shipParts = new List<ShipPart>();
+            Vector vector = Norm(shipEndPoint - shipStartPoint);
+            shipParts.Add(new ShipPart(shipEndPoint));
+            shipParts.Add(new ShipPart(shipStartPoint));
+
+            while (!shipParts.Contains(new ShipPart(shipParts.Last().Coordinate + vector)))
+            {
+                shipParts.Add(new ShipPart(shipParts.Last().Coordinate + vector));
             }
 
-            for (int i = 0; i < length; i++)
+            return shipParts;
+        }
+
+        public List<Vector> GetNotValidCoordinates()
+        {
+            List<Vector> notValidCoordinates = new List<Vector>();
+            notValidCoordinates.AddRange(this.ShipsCoordinate.ConvertAll(s => s.Coordinate));
+
+            notValidCoordinates.AddRange(notValidCoordinates.ConvertAll(s => s + Vector.Down));
+            notValidCoordinates.AddRange(notValidCoordinates.ConvertAll(s => s + Vector.Up));
+            notValidCoordinates.AddRange(notValidCoordinates.ConvertAll(s => s + Vector.Left));
+            notValidCoordinates.AddRange(notValidCoordinates.ConvertAll(s => s + Vector.Right));
+            notValidCoordinates = notValidCoordinates.Distinct().ToList();
+
+            return notValidCoordinates;
+        }
+        private Vector Norm(Vector a)
+        {
+            Vector actual = new Vector(a.X, a.Y);
+            if (actual.Y != 0)
             {
-                if (this.ShipsCoordinate.Exists(s => s.Coordinate == (position[0] + (position[1] * i))))
-                {
-                    return false;
-                }
+                actual.Y = actual.Y / Math.Abs(actual.Y);
             }
-            return true;
-        }*/
+            if (actual.X != 0)
+            {
+                actual.X = actual.X / Math.Abs(actual.X);
+            }
+            return actual;
+        }
     }
 }

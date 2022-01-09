@@ -64,6 +64,35 @@ namespace Torpedo.GameElement.Tests
             // Arrange
             Vector shipStartPoint = new Vector(1, 2);
             Vector shipEndPoint = new Vector(1, 5);
+            Vector shipStartPoint2 = new Vector(3, 2);
+            Vector shipEndPoint2 = new Vector(3, 5);
+            List<ShipPart> expected = new List<ShipPart>();
+            expected.Add(new ShipPart(new Vector(1, 5)));
+            expected.Add(new ShipPart(new Vector(1, 2)));
+            expected.Add(new ShipPart(new Vector(1, 3)));
+            expected.Add(new ShipPart(new Vector(1, 4)));
+            expected.Add(new ShipPart(new Vector(3, 5)));
+            expected.Add(new ShipPart(new Vector(3, 2)));
+            expected.Add(new ShipPart(new Vector(3, 3)));
+            expected.Add(new ShipPart(new Vector(3, 4)));
+            RealPlayer player = new RealPlayer("test");
+
+            // Act
+            player.PutDownAShip(shipStartPoint, shipEndPoint);
+            player.PutDownAShip(shipStartPoint2, shipEndPoint2);
+
+            // Assert
+            Assert.IsTrue(expected.All(player.ShipsCoordinate.Contains) && (expected.Count == player.ShipsCoordinate.Count));
+            Assert.AreEqual(player.ShipCount, 2);
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
+        public void PutDownAShip_PuttwoShipTooCloseDown_ThrowExeption()
+        {
+            // Arrange
+            Vector shipStartPoint = new Vector(1, 2);
+            Vector shipEndPoint = new Vector(1, 5);
             Vector shipStartPoint2 = new Vector(2, 2);
             Vector shipEndPoint2 = new Vector(2, 5);
             List<ShipPart> expected = new List<ShipPart>();
@@ -103,6 +132,40 @@ namespace Torpedo.GameElement.Tests
 
             // Act
             player.PutDownAShip(new Vector(1, 3), new Vector(5, 3));
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
+        public void PutDownAShip_PutShipDownwhitNotInLineCordinates_ThrowExeption()
+        {
+            // Arrange
+            Vector shipStartPoint = new Vector(3, 2);
+            Vector shipEndPoint = new Vector(1, 5);
+            List<ShipPart> expected = new List<ShipPart>();
+            RealPlayer player = new RealPlayer("test");
+
+            // Act
+            player.PutDownAShip(shipStartPoint, shipEndPoint);
+
+            // Assert
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
+        public void PutDownAShip_TryNotCorrectSizeShip_ThrowExeption()
+        {
+            // Arrange
+            Vector shipStartPoint = new Vector(1, 1);
+            Vector shipEndPoint = new Vector(1, 5);
+            List<ShipPart> expected = new List<ShipPart>();
+            RealPlayer player = new RealPlayer("test");
+
+            // Act
+            player.PutDownAShip(shipStartPoint, shipEndPoint);
 
             // Assert
             Assert.Fail();
