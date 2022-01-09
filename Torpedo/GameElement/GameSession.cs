@@ -25,6 +25,8 @@ namespace Torpedo.GameElement
         }
         /// <summary>
         /// !!!!Nincs tesztelve hogy a kordináták a táblán vannak e és egy vonalban vannak e
+        /// !!!Nincs tesztelve a halyó hosz se
+        /// 
         /// </summary>
         /// <param name="shipStartPoint"></param>
         /// <param name="shipEndPoint"></param>
