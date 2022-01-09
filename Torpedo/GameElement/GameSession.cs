@@ -66,7 +66,7 @@ namespace Torpedo.GameElement
         private void SecondPhaseInIt()
         {
             var random = new Random();
-            var randomInt = random.Next(1);
+            var randomInt = random.Next(2);
             ActualPlayer = randomInt == 0 ? Player1 : Player2;
             if (ActualPlayer is AIPlayer aI)
             {
