@@ -72,7 +72,7 @@ namespace Torpedo.Windows
 
             if (isBotCheckbox.IsChecked == true)
             {
-                Player2 = new AIPlayer("Bot");
+                Player2 = new AIPlayer();
             }
             else
             {

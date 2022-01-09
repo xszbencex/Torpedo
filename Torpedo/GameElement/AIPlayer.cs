@@ -11,7 +11,7 @@ namespace Torpedo.GameElement
     public class AIPlayer : Player
     {
         // TODO AIPlayer implementáció (csak átmásoltam a RealPlayert)
-        public AIPlayer(string name) : base(name)
+        public AIPlayer() : base("Bot")
         {
         }
 
