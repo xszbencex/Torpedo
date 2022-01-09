@@ -16,5 +16,16 @@ namespace Torpedo.Model
 
         public Vector Coordinate { get; set; }
         public bool Hit { get; set; } = false;
+
+        public override bool Equals(object? obj)
+        {
+            return obj is FiredShot shot &&
+                   EqualityComparer<Vector>.Default.Equals(this.Coordinate, shot.Coordinate);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(this.Coordinate);
+        }
     }
 }
