@@ -30,6 +30,14 @@ namespace Torpedo.GameElement
             {
                 throw new ArgumentException("A hajó kezdő és vég pontjának egy sorba vagy oszlopba kell esnie");
             }
+            if (!MainSettings.CoordinateValidation(shipStartPoint))
+            {
+                throw new ArgumentException("SzárazFöld Kapitány!!!!");
+            }
+            if (!MainSettings.CoordinateValidation(shipEndPoint))
+            {
+                throw new ArgumentException("SzárazFöld Kapitány!!!!");
+            }
             System.Diagnostics.Contracts.Contract.EndContractBlock();
 
             List<ShipPart> newShipParts = GetShipParts(shipStartPoint, shipEndPoint);
