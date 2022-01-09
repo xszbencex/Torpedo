@@ -15,6 +15,7 @@ namespace Torpedo.GameElement
             this.Name = name;
             this.ShipsCoordinate = new List<ShipPart>();
             this.FiredShots = new List<FiredShot>();
+            this.ShipCount = 0;
         }
 
         public abstract void PutDownAShip(Vector shipStartPoint, Vector shipEndPoint);

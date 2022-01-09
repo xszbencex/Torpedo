@@ -16,7 +16,6 @@ namespace Torpedo.GameElement
         public Vector? ShipStartPoint { get; set; }
         public bool GameOver { get; set; }
         public int Winner { get; set; }
-        public Vector LastShot { get; set; }
         public GameSession(Player player1, Player player2, Player actualPlayer)
         {
             this.Player1 = player1;
@@ -24,7 +23,11 @@ namespace Torpedo.GameElement
             this.ActualPlayer = actualPlayer;
             this.IsPuttingDownPhase = false;
         }
-
+        /// <summary>
+        /// !!!!Nincs tesztelve hogy a kordináták a táblán vannak e és egy vonalban vannak e
+        /// </summary>
+        /// <param name="shipStartPoint"></param>
+        /// <param name="shipEndPoint"></param>
         public void ActualPlayerPutsDownShip(Vector shipStartPoint, Vector shipEndPoint)
         {
             // TODO actual player PutDownShip-jét meghívni,
@@ -51,17 +54,18 @@ namespace Torpedo.GameElement
         public void ActualPlayerTakeAShot(Vector shotPoint)
         {
             // TODO shotPoint kezelése, azzal kell hívni az actual player TakeAShot-ját
-            LastShot = ActualPlayer.TakeAShot();
-            Player otherPlayer;
-            otherPlayer = GetOtherPlayer();
-            try//Nem vagyok benne biztos hogy működik
+            // A TakeShot azt Bemenetnek Szántam volna de ha innen meg kapja akkor igazábol lehet hogy felesleges is
+            // Ennek a végén lehet meg lehetne már hívni a GameOvert mert egy lövés után lesz vége meg meg lehet álapitani hogy kinyert az aki épen lőtt
+            // és ha arra fel lehet iratkozni akkor innen ji lehet váltani a játék végét (??? nem vagyok benne teljesen biztos hogy ez működhet)
+            Player otherPlayer = GetOtherPlayer();
+            try// Nem vagyok benne biztos hogy működik NINCS TESTELVE
             {
-                otherPlayer.ShipsCoordinate.Where(s => s.Coordinate == LastShot).Single().Destroyed = true;
-                ActualPlayer.FiredShots.Add(new FiredShot(LastShot, true));
+                otherPlayer.ShipsCoordinate.Where(s => s.Coordinate == shotPoint).Single().Destroyed = true;
+                ActualPlayer.FiredShots.Add(new FiredShot(shotPoint, true));
             }
             catch
             {
-                ActualPlayer.FiredShots.Add(new FiredShot(LastShot, false));
+                ActualPlayer.FiredShots.Add(new FiredShot(shotPoint, false));
             }
         }
 
