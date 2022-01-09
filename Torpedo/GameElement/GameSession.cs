@@ -101,8 +101,12 @@ namespace Torpedo.GameElement
 
         private void RegisteringAShot(Vector shotPoint)
         {
+            if (ActualPlayer.FiredShots.Where(f => f.Coordinate ==shotPoint).Any())
+            {
+                throw new ArgumentException("Odamár lőtél");
+            }
             Player otherPlayer = GetOtherPlayer();
-            try// Nem vagyok benne biztos hogy működik !!!!!Kézel testelve működni Látszik!!!!!
+            try
             {
                 otherPlayer.ShipsCoordinate.Where(s => s.Coordinate == shotPoint).Single().Destroyed = true;
                 ActualPlayer.FiredShots.Add(new FiredShot(shotPoint, true));
