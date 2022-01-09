@@ -113,7 +113,7 @@ namespace Torpedo.GameElement
             }
             if (IsGameOver())
             {
-                throw new GameOverExeption("{0} nyert!",ActualPlayer.Name);
+                throw new GameOverExeption($"{ActualPlayer.Name} nyert!");
             }
         }
 
