@@ -10,7 +10,7 @@ namespace Torpedo.Settings
     public static class MainSettings
     {
         public const int GridHeight = 10, GridWidth = 10;
-        public static readonly int[] PlayableShipsLength = new int[] { 2, 2, 4, 5, 6 };
+        public static readonly int[] PlayableShipsLength = new int[] { 2, 2 };
 
         public static bool CoordinateValidation(Vector coordinate)
         {

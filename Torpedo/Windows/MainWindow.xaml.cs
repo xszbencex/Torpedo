@@ -175,10 +175,15 @@ namespace Torpedo.Windows
                 {
                     _gameSession.ActualPlayerPutsDownShip((Vector)_gameSession.ShipStartPoint, vectorOfClick);
                     RenderState();
+
+                    /// Joci írta bele
+                    _gameSession.ShipStartPoint = null;
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
+                    /// Joci írta bele
+                    _gameSession.ShipStartPoint = null;
                 }
             }
         }

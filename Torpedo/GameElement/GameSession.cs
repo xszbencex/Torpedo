@@ -21,7 +21,7 @@ namespace Torpedo.GameElement
             this.Player1 = player1;
             this.Player2 = player2;
             this.ActualPlayer = actualPlayer;
-            this.IsPuttingDownPhase = false;
+            this.IsPuttingDownPhase = true;
         }
         /// <summary>
         /// !!!!Nincs tesztelve hogy a kordináták a táblán vannak e és egy vonalban vannak e
@@ -58,7 +58,7 @@ namespace Torpedo.GameElement
             // Ennek a végén lehet meg lehetne már hívni a GameOvert mert egy lövés után lesz vége meg meg lehet álapitani hogy kinyert az aki épen lőtt
             // és ha arra fel lehet iratkozni akkor innen ji lehet váltani a játék végét (??? nem vagyok benne teljesen biztos hogy ez működhet)
             Player otherPlayer = GetOtherPlayer();
-            try// Nem vagyok benne biztos hogy működik !!!!!NINCS TESTELVE!!!!!
+            try// Nem vagyok benne biztos hogy működik !!!!!Kézel testelve működni Látszik!!!!!
             {
                 otherPlayer.ShipsCoordinate.Where(s => s.Coordinate == shotPoint).Single().Destroyed = true;
                 ActualPlayer.FiredShots.Add(new FiredShot(shotPoint, true));
@@ -67,6 +67,8 @@ namespace Torpedo.GameElement
             {
                 ActualPlayer.FiredShots.Add(new FiredShot(shotPoint, false));
             }
+
+            ActualPlayer = GetOtherPlayer();
         }
 
         private Player GetOtherPlayer()
