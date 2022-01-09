@@ -47,7 +47,32 @@ namespace Torpedo.GameElement
 
         public override Vector TakeAShot()
         {
-            throw new NotImplementedException();
+            var random = new Random();
+            Vector shot = new Vector(random.Next(MainSettings.GridWidth), random.Next(MainSettings.GridHeight));
+
+            List<Vector> desirableTarget = new List<Vector>();
+
+            FiredShots.Where(shot => shot.Hit == true).ToList().ForEach(s =>
+            {
+                desirableTarget.Add(s.Coordinate + Vector.Up);
+                desirableTarget.Add(s.Coordinate + Vector.Down);
+                desirableTarget.Add(s.Coordinate + Vector.Right);
+                desirableTarget.Add(s.Coordinate + Vector.Left);
+            });
+            if (desirableTarget.Count != 0)
+            {
+                return desirableTarget[random.Next(desirableTarget.Count)];
+            }
+
+            while (FiredShots.Where(s => s.Coordinate == shot).Any())
+            {
+                shot = new Vector(random.Next(MainSettings.GridWidth), random.Next(MainSettings.GridHeight));
+            }
+            if (MainSettings.CoordinateValidation(shot))
+            {
+                return shot;
+            }
+            throw new Exception("shot is not on the table");
         }
     }
 }
