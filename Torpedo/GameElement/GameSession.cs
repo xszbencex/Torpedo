@@ -111,6 +111,10 @@ namespace Torpedo.GameElement
             {
                 ActualPlayer.FiredShots.Add(new FiredShot(shotPoint, false));
             }
+            if (IsGameOver())
+            {
+                throw new GameOverExeption("{0} nyert!",ActualPlayer.Name);
+            }
         }
 
         private Player GetOtherPlayer()
@@ -120,7 +124,7 @@ namespace Torpedo.GameElement
 
         private bool IsGameOver()
         {
-            return ActualPlayer.ShipsCoordinate.Where(s => s.Destroyed == false).Any();
+            return !GetOtherPlayer().ShipsCoordinate.Where(s => s.Destroyed == false).Any();
         }
     }
 }
