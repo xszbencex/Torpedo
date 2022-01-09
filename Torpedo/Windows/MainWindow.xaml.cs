@@ -114,70 +114,6 @@ namespace Torpedo.Windows
             SetTextBlocks();
             ChangePage();
             RenderPlayerFields();
-            if (player2 is AIPlayer)
-            {
-                showAIShipsLabel.Visibility = Visibility.Visible;
-            }
-        }
-
-        private void ConstructGameSession(Player player1, Player player2)
-        {
-            _gameSession = new GameSession(player1, player2);
-        }
-
-        private void SetTextBlocks()
-        {
-            player1Name.Text = _gameSession.Player1.Name;
-            player2Name.Text = _gameSession.Player2.Name;
-            this.NumberOfRounds = 0;
-            this.Player1Hits = _gameSession.Player1.FiredShots.FindAll(shot => shot.Hit).Count;
-            this.Player2Hits = _gameSession.Player2.FiredShots.FindAll(shot => shot.Hit).Count;
-            this.ActualPlayerName = _gameSession.ActualPlayer.Name;
-            this.ActualPhase = _gameSession.IsPuttingDownPhase ? "Putting down" : "Shooting";
-            if (_gameSession.ActualPlayer.ShipCount < MainSettings.PlayableShipsLength.Length)
-            {
-                this.NextShipSize = MainSettings.PlayableShipsLength[_gameSession.ActualPlayer.ShipCount];
-            }
-            else
-            {
-                nextShipSizeLabel.Visibility = Visibility.Hidden;
-                nextShipSize.Visibility = Visibility.Hidden;
-            }
-        }
-
-        private void ChangePage()
-        {
-            startingPageGrid.Visibility = startingPageGrid.Visibility == Visibility.Visible ? Visibility.Hidden : Visibility.Visible;
-            gamePageGrid.Visibility = gamePageGrid.Visibility == Visibility.Visible ? Visibility.Hidden : Visibility.Visible;
-        }
-
-        private void RenderPlayerFields()
-        {
-            RenderField(player1Canvas);
-            RenderField(player2Canvas);
-        }
-
-        private void RenderField(Canvas canvas)
-        {
-            for (int i = 0; i < MainSettings.GridHeight; i++)
-            {
-                for (int j = 0; j < MainSettings.GridWidth; j++)
-                {
-                    var field = new Rectangle
-                    {
-                        Fill = MainSettings.DefaultFieldColor,
-                        Stroke = MainSettings.DefaultFieldStrokeColor,
-                        StrokeThickness = 0.5
-                    };
-                    var unitY = canvas.Width / MainSettings.GridWidth;
-                    var unitX = canvas.Height / MainSettings.GridHeight;
-                    field.Width = unitY;
-                    field.Height = unitX;
-                    Canvas.SetTop(field, unitY * i);
-                    Canvas.SetLeft(field, unitX * j);
-                    canvas.Children.Add(field);
-                }
-            }
         }
 
         private void OnCanvasClick(object sender, MouseButtonEventArgs e)
@@ -209,11 +145,28 @@ namespace Torpedo.Windows
             SetTextBlocks();
         }
 
+        private void WindowKeyUp(object sender, KeyEventArgs e)
+        {
+            var keyPressed = e.Key;
+            if (keyPressed == Key.H && _gameSession.Player2 is AIPlayer && !_gameSession.IsPuttingDownPhase)
+            {
+                if (_isAIShipsVisible)
+                {
+                    RenderState();
+                    _isAIShipsVisible = false;
+                }
+                else
+                {
+                    DrawAIShips();
+                    _isAIShipsVisible = true;
+                }
+            }
+        }
+
         private void HandlePuttingDown(Vector vectorOfClick)
         {
             if (_gameSession.ShipStartPoint == null)
             {
-                // TODO már shipPart-e ahova rakná
                 _gameSession.ShipStartPoint = vectorOfClick;
                 Rectangle field = GetRectangleFromVector(vectorOfClick, GetActualPlayerCanvas());
                 field.Fill = MainSettings.ShipColor;
@@ -239,8 +192,108 @@ namespace Torpedo.Windows
 
         private void HandleShot(Vector vectorOfClick)
         {
-            _gameSession.ActualPlayerTakeAShot(vectorOfClick);
-            RenderState();
+            try
+            {
+                _gameSession.ActualPlayerTakeAShot(vectorOfClick);
+                RenderState();
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show(ex.Message);
+                RenderState();
+            }
+            catch (GameOverExeption ex)
+            {
+                MessageBox.Show(ex.Message);
+                EndGame();
+            }
+        }
+
+        private void RenderState()
+        {
+            ClearFields(GetActualPlayerCanvas());
+            ClearFields(GetEnemyPlayerCanvas());
+            if (_gameSession.IsPuttingDownPhase)
+            {
+                DrawActualPlayerShips();
+            }
+            else
+            {
+                DrawActualPlayerShips();
+                DrawActualPlayerShots();
+                DrawEnemyPlayerShots();
+            }
+        }
+
+        private void ConstructGameSession(Player player1, Player player2)
+        {
+            _gameSession = new GameSession(player1, player2);
+        }
+
+        private void ChangePage()
+        {
+            startingPageGrid.Visibility = startingPageGrid.Visibility == Visibility.Visible ? Visibility.Hidden : Visibility.Visible;
+            gamePageGrid.Visibility = gamePageGrid.Visibility == Visibility.Visible ? Visibility.Hidden : Visibility.Visible;
+        }
+
+        private void RenderPlayerFields()
+        {
+            RenderField(player1Canvas);
+            RenderField(player2Canvas);
+        }
+
+        private void EndGame()
+        {
+            // TODO save to database
+            player1Canvas.Children.Clear();
+            player2Canvas.Children.Clear();
+            ChangePage();
+        }
+
+        private void RenderField(Canvas canvas)
+        {
+            for (int i = 0; i < MainSettings.GridHeight; i++)
+            {
+                for (int j = 0; j < MainSettings.GridWidth; j++)
+                {
+                    var field = new Rectangle
+                    {
+                        Fill = MainSettings.DefaultFieldColor,
+                        Stroke = MainSettings.DefaultFieldStrokeColor,
+                        StrokeThickness = 0.5
+                    };
+                    var unitY = canvas.Width / MainSettings.GridWidth;
+                    var unitX = canvas.Height / MainSettings.GridHeight;
+                    field.Width = unitY;
+                    field.Height = unitX;
+                    Canvas.SetTop(field, unitY * i);
+                    Canvas.SetLeft(field, unitX * j);
+                    canvas.Children.Add(field);
+                }
+            }
+        }
+
+        private void SetTextBlocks()
+        {
+            player1Name.Text = _gameSession.Player1.Name;
+            player2Name.Text = _gameSession.Player2.Name;
+            this.NumberOfRounds = 0;
+            this.Player1Hits = _gameSession.Player1.FiredShots.FindAll(shot => shot.Hit).Count;
+            this.Player2Hits = _gameSession.Player2.FiredShots.FindAll(shot => shot.Hit).Count;
+            this.ActualPlayerName = _gameSession.ActualPlayer.Name;
+            showAIShipsLabel.Visibility = _gameSession.Player2 is AIPlayer ? Visibility.Visible : Visibility.Hidden;
+            this.ActualPhase = _gameSession.IsPuttingDownPhase ? "Putting down" : "Shooting";
+            if (_gameSession.IsPuttingDownPhase && _gameSession.ActualPlayer.ShipCount < MainSettings.PlayableShipsLength.Length)
+            {
+                this.NextShipSize = MainSettings.PlayableShipsLength[_gameSession.ActualPlayer.ShipCount];
+                nextShipSizeLabel.Visibility = Visibility.Visible;
+                nextShipSize.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                nextShipSizeLabel.Visibility = Visibility.Hidden;
+                nextShipSize.Visibility = Visibility.Hidden;
+            }
         }
 
         private Rectangle GetRectangleFromVector(Vector vector, Canvas canvas)
@@ -261,22 +314,6 @@ namespace Torpedo.Windows
             var x = Math.Floor(point.X / 30);
             var y = Math.Floor(point.Y / 30);
             return new Vector((int)x, (int)y);
-        }
-
-        private void RenderState()
-        {
-            ClearFields(GetActualPlayerCanvas());
-            ClearFields(GetEnemyPlayerCanvas());
-            if (_gameSession.IsPuttingDownPhase)
-            {
-                DrawActualPlayerShips();
-            }
-            else
-            {
-                DrawActualPlayerShips();
-                DrawActualPlayerShots();
-                DrawEnemyPlayerShots();
-            }
         }
 
         private void DrawActualPlayerShips()
@@ -373,6 +410,12 @@ namespace Torpedo.Windows
                             GetRectangleFromVector(new Vector(vectorOfHover.X, i), GetActualPlayerCanvas()).Fill = MainSettings.ShipColor;
                         }
                     }
+                    else
+                    {
+                        ClearFields(GetActualPlayerCanvas());
+                        DrawActualPlayerShips();
+                        GetRectangleFromVector(_gameSession.ShipStartPoint.GetValueOrDefault(), GetActualPlayerCanvas()).Fill = MainSettings.ShipColor;
+                    }
                 }
             }
         }
@@ -392,7 +435,6 @@ namespace Torpedo.Windows
                 }
                 else
                 {
-                    // TODO azt is ami hover miatt lett kék
                     rectangle.Fill = MainSettings.DefaultFieldColor;
                 }
             }
@@ -406,24 +448,6 @@ namespace Torpedo.Windows
         private Canvas GetEnemyPlayerCanvas()
         {
             return _gameSession.ActualPlayer.Equals(_gameSession.Player1) ? player2Canvas : player1Canvas;
-        }
-
-        private void WindowKeyUp(object sender, KeyEventArgs e)
-        {
-            var keyPressed = e.Key;
-            if (keyPressed == Key.H && _gameSession.Player2 is AIPlayer && !_gameSession.IsPuttingDownPhase)
-            {
-                if (_isAIShipsVisible)
-                {
-                    RenderState();
-                    _isAIShipsVisible = false;
-                }
-                else
-                {
-                    DrawAIShips();
-                    _isAIShipsVisible = true;
-                }
-            }
         }
 
         private void DummyInitializeGame()
