@@ -17,6 +17,8 @@ namespace Torpedo.Windows
     {
         private GameSession _gameSession;
 
+        private bool _isAIShipsVisible = false;
+
         private int _numberOfRounds;
         public int NumberOfRounds
         {
@@ -72,6 +74,17 @@ namespace Torpedo.Windows
             }
         }
 
+        private int _nextShipSize;
+        public int NextShipSize
+        {
+            get { return _nextShipSize; }
+            set
+            {
+                _nextShipSize = value;
+                nextShipSize.Text = $"{_nextShipSize}";
+            }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -101,6 +114,10 @@ namespace Torpedo.Windows
             SetTextBlocks();
             ChangePage();
             RenderPlayerFields();
+            if (player2 is AIPlayer)
+            {
+                showAIShipsLabel.Visibility = Visibility.Visible;
+            }
         }
 
         private void ConstructGameSession(Player player1, Player player2)
@@ -117,7 +134,15 @@ namespace Torpedo.Windows
             this.Player2Hits = _gameSession.Player2.FiredShots.FindAll(shot => shot.Hit).Count;
             this.ActualPlayerName = _gameSession.ActualPlayer.Name;
             this.ActualPhase = _gameSession.IsPuttingDownPhase ? "Putting down" : "Shooting";
-            // TODO next ship size MainSettings.PlayableShipsLength[_gameSession.ActualPlaer.ShipCount]
+            if (_gameSession.ActualPlayer.ShipCount < MainSettings.PlayableShipsLength.Length)
+            {
+                this.NextShipSize = MainSettings.PlayableShipsLength[_gameSession.ActualPlayer.ShipCount];
+            }
+            else
+            {
+                nextShipSizeLabel.Visibility = Visibility.Hidden;
+                nextShipSize.Visibility = Visibility.Hidden;
+            }
         }
 
         private void ChangePage()
@@ -361,13 +386,13 @@ namespace Torpedo.Windows
                 var x = Math.Floor(point.X / 30);
                 var y = Math.Floor(point.Y / 30);
                 var vectorOfHover = new Vector((int)x, (int)y);
-                if (_gameSession.ShipStartPoint == vectorOfHover
-                    || _gameSession.ActualPlayer.ShipsCoordinate.Find(shipPart => shipPart.Coordinate == vectorOfHover) != null)
+                if (_gameSession.ActualPlayer.ShipsCoordinate.Find(shipPart => shipPart.Coordinate == vectorOfHover) != null)
                 {
                     rectangle.Fill = MainSettings.ShipColor;
                 }
                 else
                 {
+                    // TODO azt is ami hover miatt lett kék
                     rectangle.Fill = MainSettings.DefaultFieldColor;
                 }
             }
@@ -386,7 +411,19 @@ namespace Torpedo.Windows
         private void WindowKeyUp(object sender, KeyEventArgs e)
         {
             var keyPressed = e.Key;
-            // TODO Show enemy table (if AI)
+            if (keyPressed == Key.H && _gameSession.Player2 is AIPlayer && !_gameSession.IsPuttingDownPhase)
+            {
+                if (_isAIShipsVisible)
+                {
+                    RenderState();
+                    _isAIShipsVisible = false;
+                }
+                else
+                {
+                    DrawAIShips();
+                    _isAIShipsVisible = true;
+                }
+            }
         }
 
         private void DummyInitializeGame()
