@@ -69,6 +69,8 @@ namespace Torpedo.GameElement
             }
 
             ActualPlayer = GetOtherPlayer();
+            // Ai elleni játéknál ha nem nyert az igazi játékos akkor it lőhet az ai és meg
+            // vizsgáljuk, hogy az ai nyert e majd vissza álitjuk az actualPlayert nem tünik szép megoldásnak de működhet
         }
 
         private Player GetOtherPlayer()
