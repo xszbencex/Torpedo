@@ -59,6 +59,34 @@ namespace Torpedo.GameElement.Tests
         }
 
         [TestMethod()]
+        public void PutDownAShip_PuttwoShipDown_TheShipsPartsWillBeInTheShipsCoordinate()
+        {
+            // Arrange
+            Vector shipStartPoint = new Vector(1, 2);
+            Vector shipEndPoint = new Vector(1, 5);
+            Vector shipStartPoint2 = new Vector(2, 2);
+            Vector shipEndPoint2 = new Vector(2, 5);
+            List<ShipPart> expected = new List<ShipPart>();
+            expected.Add(new ShipPart(new Vector(1, 5)));
+            expected.Add(new ShipPart(new Vector(1, 2)));
+            expected.Add(new ShipPart(new Vector(1, 3)));
+            expected.Add(new ShipPart(new Vector(1, 4)));
+            expected.Add(new ShipPart(new Vector(2, 5)));
+            expected.Add(new ShipPart(new Vector(2, 2)));
+            expected.Add(new ShipPart(new Vector(2, 3)));
+            expected.Add(new ShipPart(new Vector(2, 4)));
+            RealPlayer player = new RealPlayer("test");
+
+            // Act
+            player.PutDownAShip(shipStartPoint, shipEndPoint);
+            player.PutDownAShip(shipStartPoint2, shipEndPoint2);
+
+            // Assert
+            Assert.IsTrue(expected.All(player.ShipsCoordinate.Contains) && (expected.Count == player.ShipsCoordinate.Count));
+            Assert.AreEqual(player.ShipCount, 2);
+        }
+
+        [TestMethod()]
         [ExpectedException(typeof(ArgumentException))]
         public void PutDownAShip_PutShipDownWhatHasSameCoordinateWhitAnotherShip_ThrowExeption()
         {
