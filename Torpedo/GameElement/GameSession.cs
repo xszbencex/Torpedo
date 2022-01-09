@@ -16,11 +16,11 @@ namespace Torpedo.GameElement
         public Vector? ShipStartPoint { get; set; }
         public bool GameOver { get; set; }
         public int Winner { get; set; }
-        public GameSession(Player player1, Player player2, Player actualPlayer)
+        public GameSession(Player player1, Player player2)
         {
             this.Player1 = player1;
             this.Player2 = player2;
-            this.ActualPlayer = actualPlayer;
+            this.ActualPlayer = player1;
             this.IsPuttingDownPhase = true;
         }
         /// <summary>
@@ -41,15 +41,36 @@ namespace Torpedo.GameElement
             // akkor nincs szükség a PutDownAllShipre  Anyi hogy a paraméterek lesznek figyelmen kivűl hagyva azt nem tudom menyire gáz???
 
              ActualPlayer.PutDownAShip(shipStartPoint, shipEndPoint);
+            // player2 ai??
 
             if ((Player1.ShipCount == MainSettings.PlayableShipsLength.Length) && (Player2.ShipCount == MainSettings.PlayableShipsLength.Length))
             {
                 IsPuttingDownPhase = false;
+                SecondPhaseInIt();
+                // eldönteni hogy ki kezd
+                // lőni ha ai kezd
             }
 
             if (ActualPlayer.ShipCount == MainSettings.PlayableShipsLength.Length)
             {
                 ActualPlayer = GetOtherPlayer();
+                if (ActualPlayer is AIPlayer aI)
+                {
+                    ActualPlayer.PutDownAShip(new Vector(-1, -1), new Vector(-1, -1));
+                    IsPuttingDownPhase = false;
+                    SecondPhaseInIt();
+                }
+            }
+        }
+
+        private void SecondPhaseInIt()
+        {
+            var random = new Random();
+            var randomInt = random.Next(1);
+            ActualPlayer = randomInt == 0 ? Player1 : Player2;
+            if (ActualPlayer is AIPlayer aI)
+            {
+                AIShot();
             }
         }
 
@@ -59,6 +80,27 @@ namespace Torpedo.GameElement
             // A TakeShot azt Bemenetnek Szántam volna de ha innen meg kapja akkor igazábol lehet hogy felesleges is
             // Ennek a végén lehet meg lehetne már hívni a GameOvert mert egy lövés után lesz vége meg meg lehet álapitani hogy kinyert az aki épen lőtt
             // és ha arra fel lehet iratkozni akkor innen ji lehet váltani a játék végét (??? nem vagyok benne teljesen biztos hogy ez működhet)
+
+            RegisteringAShot(shotPoint);
+
+            ActualPlayer = GetOtherPlayer();
+            if (ActualPlayer is AIPlayer aI)
+            {
+                AIShot();
+            }
+
+            // Ai elleni játéknál ha nem nyert az igazi játékos akkor it lőhet az ai és meg
+            // vizsgáljuk, hogy az ai nyert e majd vissza álitjuk az actualPlayert nem tünik szép megoldásnak de működhet
+        }
+
+        private void AIShot()
+        {
+            RegisteringAShot(ActualPlayer.TakeAShot());
+            ActualPlayer = GetOtherPlayer();
+        }
+
+        private void RegisteringAShot(Vector shotPoint)
+        {
             Player otherPlayer = GetOtherPlayer();
             try// Nem vagyok benne biztos hogy működik !!!!!Kézel testelve működni Látszik!!!!!
             {
@@ -69,10 +111,6 @@ namespace Torpedo.GameElement
             {
                 ActualPlayer.FiredShots.Add(new FiredShot(shotPoint, false));
             }
-
-            ActualPlayer = GetOtherPlayer();
-            // Ai elleni játéknál ha nem nyert az igazi játékos akkor it lőhet az ai és meg
-            // vizsgáljuk, hogy az ai nyert e majd vissza álitjuk az actualPlayert nem tünik szép megoldásnak de működhet
         }
 
         private Player GetOtherPlayer()
