@@ -58,7 +58,7 @@ namespace Torpedo.GameElement
             // Ennek a végén lehet meg lehetne már hívni a GameOvert mert egy lövés után lesz vége meg meg lehet álapitani hogy kinyert az aki épen lőtt
             // és ha arra fel lehet iratkozni akkor innen ji lehet váltani a játék végét (??? nem vagyok benne teljesen biztos hogy ez működhet)
             Player otherPlayer = GetOtherPlayer();
-            try// Nem vagyok benne biztos hogy működik NINCS TESTELVE
+            try// Nem vagyok benne biztos hogy működik !!!!!NINCS TESTELVE!!!!!
             {
                 otherPlayer.ShipsCoordinate.Where(s => s.Coordinate == shotPoint).Single().Destroyed = true;
                 ActualPlayer.FiredShots.Add(new FiredShot(shotPoint, true));
