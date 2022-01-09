@@ -9,20 +9,20 @@ namespace Torpedo.Model
 {
     public class ShipPart
     {
-        public ShipPart(Vector? coordinate) // TODO nem biztos, hogy kell a ?
+        public ShipPart(Vector coordinate)
         {
             this.Coordinate = coordinate;
             this.Destroyed = false;
         }
 
-        public Vector? Coordinate { get; set; }
+        public Vector Coordinate { get; set; }
         public bool Destroyed { get; set; } = false;
 
         public override bool Equals(object? obj)
         {
-            return obj is ShipPart part &&
-                   EqualityComparer<Vector?>.Default.Equals(this.Coordinate, part.Coordinate) &&
-                   this.Destroyed == part.Destroyed;
+            return obj is ShipPart part
+                && EqualityComparer<Vector>.Default.Equals(this.Coordinate, part.Coordinate)
+                && this.Destroyed == part.Destroyed;
         }
 
         public override int GetHashCode()
