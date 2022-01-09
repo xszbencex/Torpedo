@@ -18,7 +18,7 @@ namespace Torpedo.GameElement
         {
             if ((shipStartPoint.X != shipEndPoint.X) && (shipStartPoint.Y != shipEndPoint.Y))
 
-                throw new ArgumentException("A hajó kezdő és vég pontjának egybe kell esnie");
+                throw new ArgumentException("A hajó kezdő és vég pontjának egy sorba vagy oszlopba kell esnie kell esnie");
 
             System.Diagnostics.Contracts.Contract.EndContractBlock();
 
