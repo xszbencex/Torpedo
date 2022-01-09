@@ -105,7 +105,7 @@ namespace Torpedo.Windows
 
         private void ConstructGameSession(Player player1, Player player2)
         {
-            _gameSession = new GameSession(player1, player2, player1);
+            _gameSession = new GameSession(player1, player2);
         }
 
         private void SetTextBlocks()
@@ -359,7 +359,7 @@ namespace Torpedo.Windows
         private void DummyInitializeGame()
         {
             var player1 = new RealPlayer("Joci");
-            _gameSession = new GameSession(player1, new RealPlayer("Bence"), player1);
+            _gameSession = new GameSession(player1, new RealPlayer("Bence"));
             SetTextBlocks();
             RenderPlayerFields();
         }
