@@ -28,15 +28,15 @@ namespace Torpedo.GameElement
         {
             if ((shipStartPoint.X != shipEndPoint.X) && (shipStartPoint.Y != shipEndPoint.Y))
             {
-                throw new ArgumentException("A hajó kezdő és vég pontjának egy sorba vagy oszlopba kell esnie");
+                throw new ArgumentException("The ship coordinates are not valid!");
             }
             if (!MainSettings.CoordinateValidation(shipStartPoint))
             {
-                throw new ArgumentException("SzárazFöld Kapitány!!!!");
+                throw new ArgumentException("Land Captain!!!!");
             }
             if (!MainSettings.CoordinateValidation(shipEndPoint))
             {
-                throw new ArgumentException("SzárazFöld Kapitány!!!!");
+                throw new ArgumentException("Land Captain!!!!");
             }
             System.Diagnostics.Contracts.Contract.EndContractBlock();
 
@@ -44,12 +44,12 @@ namespace Torpedo.GameElement
 
             if (newShipParts.Count != MainSettings.PlayableShipsLength[ShipCount])
             {
-                throw new ArgumentException($"A hajód nem {MainSettings.PlayableShipsLength[ShipCount]} hosszú!");
+                throw new ArgumentException($"Your ship is not {MainSettings.PlayableShipsLength[ShipCount]} units long!");
             }
 
             if (newShipParts.ConvertAll(s => s.Coordinate).Any(GetNotValidCoordinates().Contains))
             {
-                throw new ArgumentException("Ütközés veszély ilyen közel nem raghatsz egymáshoz hajókat");
+                throw new ArgumentException("You can't put ships next to each other.");
             }
             ShipsCoordinate.AddRange(newShipParts);
             ShipCount = ShipCount + 1;

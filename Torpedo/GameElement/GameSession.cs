@@ -104,7 +104,7 @@ namespace Torpedo.GameElement
         {
             if (ActualPlayer.FiredShots.Where(f => f.Coordinate == shotPoint).Any())
             {
-                throw new ArgumentException("Odamár lőtél");
+                throw new ArgumentException("You've already shot here!");
             }
             Player otherPlayer = GetOtherPlayer();
             try
@@ -118,7 +118,7 @@ namespace Torpedo.GameElement
             }
             if (IsGameOver())
             {
-                throw new GameOverExeption($"{ActualPlayer.Name} nyert!");
+                throw new GameOverExeption($"{ActualPlayer.Name} wins!");
             }
         }
 
