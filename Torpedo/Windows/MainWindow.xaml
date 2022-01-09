@@ -91,6 +91,9 @@
                     <TextBlock Name="actualPhaseText" TextAlignment="Center" Margin="0,0,0,10" FontSize="18"></TextBlock>
                     <Label HorizontalAlignment="Center">Actual player:</Label>
                     <TextBlock Name="actualPlayerText" TextAlignment="Center" FontSize="18"></TextBlock>
+                    <Label HorizontalAlignment="Center" Name="nextShipSizeLabel">Next ship size:</Label>
+                    <TextBlock Name="nextShipSize" TextAlignment="Center" FontSize="18"></TextBlock>
+                    <TextBlock TextAlignment="Center" Visibility="Hidden" Name="showAIShipsLabel">Press H to show AI ships</TextBlock>
                 </StackPanel>
 
                 <StackPanel Orientation="Vertical" Grid.Column="2" Margin="10,10,10,0">
