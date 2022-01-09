@@ -50,10 +50,32 @@ namespace Torpedo.Windows
             }
         }
 
+        private string _actualPlayerName;
+        public string ActualPlayerName
+        {
+            get { return _actualPlayerName; }
+            set
+            {
+                _actualPlayerName = value;
+                actualPlayerText.Text = _actualPlayerName;
+            }
+        }
+
+        private string _actualPhase;
+        public string ActualPhase
+        {
+            get { return _actualPhase; }
+            set
+            {
+                _actualPhase = value;
+                actualPhaseText.Text = _actualPhase;
+            }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
-            // DummyInitializeGame();
+            DummyInitializeGame();
         }
 
         private void Start_Click(object sender, RoutedEventArgs e)
@@ -83,8 +105,6 @@ namespace Torpedo.Windows
 
         private void ConstructGameSession(Player player1, Player player2)
         {
-            var random = new Random();
-            var randomInt = random.Next(1);
             _gameSession = new GameSession(player1, player2);
         }
 
@@ -93,8 +113,10 @@ namespace Torpedo.Windows
             player1Name.Text = _gameSession.Player1.Name;
             player2Name.Text = _gameSession.Player2.Name;
             this.NumberOfRounds = 0;
-            this.Player1Hits = 0;
-            this.Player2Hits = 0;
+            this.Player1Hits = _gameSession.Player1.FiredShots.FindAll(shot => shot.Hit).Count;
+            this.Player2Hits = _gameSession.Player2.FiredShots.FindAll(shot => shot.Hit).Count;
+            this.ActualPlayerName = _gameSession.ActualPlayer.Name;
+            this.ActualPhase = _gameSession.IsPuttingDownPhase ? "Putting down" : "Shooting";
         }
 
         private void ChangePage()
@@ -159,12 +181,14 @@ namespace Torpedo.Windows
                     MessageBox.Show("Click on enemy field!");
                 }
             }
+            SetTextBlocks();
         }
 
         private void HandlePuttingDown(Vector vectorOfClick)
         {
             if (_gameSession.ShipStartPoint == null)
             {
+                // TODO már shipPart-e ahova rakná
                 _gameSession.ShipStartPoint = vectorOfClick;
                 Rectangle field = GetRectangleFromVector(vectorOfClick, GetActualPlayerCanvas());
                 field.Fill = Brushes.Aqua;
@@ -183,6 +207,7 @@ namespace Torpedo.Windows
                 {
                     MessageBox.Show(ex.Message);
                     /// Joci írta bele
+                    RenderState();
                     _gameSession.ShipStartPoint = null;
                 }
             }
@@ -216,6 +241,8 @@ namespace Torpedo.Windows
 
         private void RenderState()
         {
+            ClearFields(GetActualPlayerCanvas());
+            ClearFields(GetEnemyPlayerCanvas());
             if (_gameSession.IsPuttingDownPhase)
             {
                 DrawActualPlayerShips();
@@ -259,6 +286,15 @@ namespace Torpedo.Windows
             {
                 GetRectangleFromVector(shot.Coordinate, GetActualPlayerCanvas()).Fill = Brushes.DarkGray;
             });
+        }
+
+        private void ClearFields(Canvas canvas)
+        {
+            foreach (var i in canvas.Children)
+            {
+                var rectangle = (Rectangle)i;
+                rectangle.Fill = Brushes.Transparent;
+            }
         }
 
         /*private void OnRectangleHover(object sender, MouseEventArgs e)
