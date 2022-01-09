@@ -77,17 +77,7 @@ namespace Torpedo.GameElement
 
         private Player GetOtherPlayer()
         {
-            Player otherPlayer;
-            if (ActualPlayer.Equals(Player1))
-            {
-                otherPlayer = Player2;
-            }
-            else
-            {
-                otherPlayer = Player1;
-            }
-
-            return otherPlayer;
+            return this.ActualPlayer.Equals(this.Player1) ? this.Player2 : this.Player1;
         }
 
         private bool IsGameOver()
