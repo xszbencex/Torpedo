@@ -196,11 +196,13 @@ namespace Torpedo.Windows
             {
                 _gameSession.ActualPlayerTakeAShot(vectorOfClick);
                 RenderState();
+                _isAIShipsVisible = false;
             }
             catch (ArgumentException ex)
             {
                 MessageBox.Show(ex.Message);
                 RenderState();
+                _isAIShipsVisible = false;
             }
             catch (GameOverExeption ex)
             {
@@ -453,7 +455,7 @@ namespace Torpedo.Windows
         private void DummyInitializeGame()
         {
             var player1 = new RealPlayer("Joci");
-            _gameSession = new GameSession(player1, new RealPlayer("Bence"));
+            _gameSession = new GameSession(player1, new AIPlayer());
             SetTextBlocks();
             RenderPlayerFields();
         }
