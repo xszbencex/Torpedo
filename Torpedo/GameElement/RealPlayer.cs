@@ -17,12 +17,16 @@ namespace Torpedo.GameElement
         public override void PutDownAShip(Vector shipStartPoint, Vector shipEndPoint)
         {
             if ((shipStartPoint.X != shipEndPoint.X) && (shipStartPoint.Y != shipEndPoint.Y))
-
+            {
                 throw new ArgumentException("A hajó kezdő és vég pontjának egy sorba vagy oszlopba kell esnie kell esnie");
-
+            }
             System.Diagnostics.Contracts.Contract.EndContractBlock();
 
             List<ShipPart> newShipParts = GetShipParts(shipStartPoint, shipEndPoint);
+            if (newShipParts.Count != MainSettings.PlayableShipsLength[ShipCount])
+            {
+                throw new ArgumentException($"A hajód nem {MainSettings.PlayableShipsLength[ShipCount]} hosszú!");
+            }
             if (newShipParts.Any(ShipsCoordinate.Contains))
             {
                 throw new ArgumentException("Hajók Ütköznek");
