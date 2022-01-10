@@ -10,7 +10,8 @@ namespace Torpedo.GameElement
 {
     public class AIPlayer : Player
     {
-        // TODO AIPlayer implementáció (csak átmásoltam a RealPlayert)
+
+        private readonly Vector[] _directions = new Vector[4] { Vector.Up, Vector.Down, Vector.Right, Vector.Left };
         public AIPlayer() : base("Bot")
         {
         }
@@ -49,53 +50,14 @@ namespace Torpedo.GameElement
         {
             var random = new Random();
 
+            List<Vector> desirableTarget = LockedTarget();
 
-            List<Vector> desirableTarget = new List<Vector>();
-
-            FiredShots.Where(shot => shot.Hit == true).ToList().ForEach(s =>
+            if (desirableTarget.Count != 0)
             {
-                desirableTarget.Add(s.Coordinate + Vector.Up);
-                desirableTarget.Add(s.Coordinate + Vector.Down);
-                desirableTarget.Add(s.Coordinate + Vector.Right);
-                desirableTarget.Add(s.Coordinate + Vector.Left);
-            });
-
-            List<Vector> lockedTarget = new List<Vector>();
-
-            FiredShots.Where(s => s.Hit).ToList().ForEach(actual =>
-            {
-               if( FiredShots.Where(s => s.Hit).Any(s => s.Coordinate == (actual.Coordinate + Vector.Up)))
-                {
-                    lockedTarget.Add(actual.Coordinate - Vector.Up);
-                }
-                if (FiredShots.Where(s => s.Hit).Any(s => s.Coordinate == (actual.Coordinate + Vector.Down)))
-                {
-                    lockedTarget.Add(actual.Coordinate - Vector.Down);
-                }
-                if (FiredShots.Where(s => s.Hit).Any(s => s.Coordinate == (actual.Coordinate + Vector.Right)))
-                {
-                    lockedTarget.Add(actual.Coordinate - Vector.Right);
-                }
-                if (FiredShots.Where(s => s.Hit).Any(s => s.Coordinate == (actual.Coordinate + Vector.Left)))
-                {
-                    lockedTarget.Add(actual.Coordinate - Vector.Left);
-                }
-            });
-
-            lockedTarget = lockedTarget.Where(s => MainSettings.CoordinateValidation(s)).ToList();
-
-            lockedTarget = lockedTarget.Where(s => !FiredShots.Contains(new FiredShot(s, true))).ToList();
-
-            if (lockedTarget.Count != 0)
-            {
-                return lockedTarget[random.Next(lockedTarget.Count)];
+                return desirableTarget[random.Next(desirableTarget.Count)];
             }
 
-
-
-            desirableTarget = desirableTarget.Where(s => MainSettings.CoordinateValidation(s)).ToList();
-
-            desirableTarget = desirableTarget.Where(s => !FiredShots.Contains(new FiredShot(s, true))).ToList();
+            desirableTarget = LockingOnToATarget();
 
             if (desirableTarget.Count != 0)
             {
@@ -115,6 +77,50 @@ namespace Torpedo.GameElement
             throw new Exception("shot is not on the table");
         }
 
-        
+        private List<Vector> LockingOnToATarget()
+        {
+            List<Vector> desirableTarget = new List<Vector>();
+            FiredShots.Where(shot => shot.Hit == true).ToList().ForEach(s =>
+            {
+                foreach (Vector direction in _directions)
+                {
+                    desirableTarget.Add(s.Coordinate + direction);
+                }
+            });
+
+
+            desirableTarget = desirableTarget.Where(s => MainSettings.CoordinateValidation(s)).ToList();
+
+            desirableTarget = desirableTarget.Where(s => !FiredShots.Contains(new FiredShot(s, true))).ToList();
+
+            return InValidTargetElimination(desirableTarget);
+        }
+
+      
+        private List<Vector> LockedTarget()
+        {
+            List<Vector> desirableTarget = new List<Vector>();
+
+            FiredShots.Where(s => s.Hit).ToList().ForEach(actual =>
+            {
+                List<FiredShot> Hits = FiredShots.Where(s => s.Hit).ToList();
+                foreach (Vector direction in _directions)
+                {
+                    if (Hits.Any(s => s.Coordinate == (actual.Coordinate + direction)))
+                    {
+                        desirableTarget.Add(actual.Coordinate - direction);
+                    }
+                }
+            });
+            return InValidTargetElimination(desirableTarget);
+        }
+
+        private List<Vector> InValidTargetElimination(List<Vector> desirableTarget)
+        {
+            desirableTarget = desirableTarget.Where(s => MainSettings.CoordinateValidation(s)).ToList();
+
+            desirableTarget = desirableTarget.Where(s => !FiredShots.Contains(new FiredShot(s, true))).ToList();
+            return desirableTarget;
+        }
     }
 }
