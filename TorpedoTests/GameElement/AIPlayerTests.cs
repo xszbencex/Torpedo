@@ -54,7 +54,7 @@ namespace Torpedo.GameElement.Tests
             }
 
             // Assert
-            Assert.AreEqual(actual.FiredShots.Distinct().Count(), actual.FiredShots.Count, MainSettings.GridWidth * MainSettings.GridHeight);
+            Assert.AreEqual( MainSettings.GridWidth * MainSettings.GridHeight, actual.FiredShots.Distinct().Count(),);
         }
 
         [TestMethod()]
