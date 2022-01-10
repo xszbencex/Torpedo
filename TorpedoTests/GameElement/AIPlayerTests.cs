@@ -118,21 +118,21 @@ namespace Torpedo.GameElement.Tests
             ai.FiredShots.Add(secondHit);
             ai.FiredShots.Add(shot);
             ai.FiredShots.Add(secondShot);
-            List<Vector> NotExpected = new List<Vector>();
-            NotExpected.Add(hitVector + Vector.Right);
-            NotExpected.Add(hitVector + Vector.Left);
-            NotExpected.Add(secondHitVector + Vector.Right);
-            NotExpected.Add(secondHitVector + Vector.Left);
-            NotExpected.Add(shotVector + Vector.Right);
-            NotExpected.Add(shotVector + Vector.Left);
-            NotExpected.Add(secondShotVector + Vector.Right);
-            NotExpected.Add(secondShotVector + Vector.Left);
+            List<Vector> notExpected = new List<Vector>();
+            notExpected.Add(hitVector + Vector.Right);
+            notExpected.Add(hitVector + Vector.Left);
+            notExpected.Add(secondHitVector + Vector.Right);
+            notExpected.Add(secondHitVector + Vector.Left);
+            notExpected.Add(shotVector + Vector.Right);
+            notExpected.Add(shotVector + Vector.Left);
+            notExpected.Add(secondShotVector + Vector.Right);
+            notExpected.Add(secondShotVector + Vector.Left);
 
             // Act
             var actual = ai.TakeAShot();
 
             // Assert
-            Assert.IsFalse(NotExpected.Contains(actual));
+            Assert.IsFalse(notExpected.Contains(actual));
         }
     }
 }

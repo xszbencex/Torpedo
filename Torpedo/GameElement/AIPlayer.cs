@@ -80,7 +80,10 @@ namespace Torpedo.GameElement
         private List<Vector> LockingOnToATarget()
         {
             List<Vector> desirableTarget = new List<Vector>();
-            FiredShots.Where(shot => shot.Hit == true).ToList().ForEach(s =>
+            FiredShots
+                .Where(shot => shot.Hit == true)
+                .ToList()
+                .ForEach(s =>
             {
                 foreach (Vector direction in _directions)
                 {
@@ -101,7 +104,10 @@ namespace Torpedo.GameElement
         {
             List<Vector> desirableTarget = new List<Vector>();
 
-            FiredShots.Where(s => s.Hit).ToList().ForEach(actual =>
+            FiredShots
+                .Where(s => s.Hit)
+                .ToList()
+                .ForEach(actual =>
             {
                 List<FiredShot> Hits = FiredShots.Where(s => s.Hit).ToList();
                 foreach (Vector direction in _directions)
@@ -120,7 +126,52 @@ namespace Torpedo.GameElement
             desirableTarget = desirableTarget.Where(s => MainSettings.CoordinateValidation(s)).ToList();
 
             desirableTarget = desirableTarget.Where(s => !FiredShots.Contains(new FiredShot(s, true))).ToList();
+            return DestroydShipElimination(desirableTarget);
+        }
+
+        private List<Vector> DestroydShipElimination(List<Vector> desirableTarget)
+        {
+            List<Vector> destroyedShip = new List<Vector>();
+            List<Vector> hits = FiredShots
+                .Where(s => s.Hit)
+                .Select(s => s.Coordinate).ToList();
+            foreach (Vector hit in hits)
+            {
+                if (IsPartOfDestroyedShip(hit))
+                {
+                    foreach(Vector direction in _directions)
+                    {
+                        destroyedShip.Add(hit + direction);
+                    }
+                }
+            }
+            desirableTarget = desirableTarget.Where(s => !destroyedShip.Contains(s)).ToList();
             return desirableTarget;
+        }
+
+        private bool IsPartOfDestroyedShip(Vector hit)
+        {
+            return (IsShipDistroyedInTheDirection(hit, Vector.Up) && IsShipDistroyedInTheDirection(hit, Vector.Down)) ||
+                      (IsShipDistroyedInTheDirection(hit, Vector.Right) && IsShipDistroyedInTheDirection(hit, Vector.Left));
+        }
+
+        private bool IsShipDistroyedInTheDirection(Vector hit, Vector direction)
+        {
+            var actual = hit + direction;
+            var shot = FiredShots.Find(s => s.Coordinate == actual);
+            if (shot != null)
+            {
+                if (shot.Hit)
+                {
+                   return IsShipDistroyedInTheDirection(actual, direction);
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            return false;
+
         }
     }
 }
