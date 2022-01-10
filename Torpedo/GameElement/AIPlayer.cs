@@ -91,15 +91,13 @@ namespace Torpedo.GameElement
                 }
             });
 
-
             desirableTarget = desirableTarget.Where(s => MainSettings.CoordinateValidation(s)).ToList();
 
             desirableTarget = desirableTarget.Where(s => !FiredShots.Contains(new FiredShot(s, true))).ToList();
 
-            return InValidTargetElimination(desirableTarget);
+            return InValidTargetElimination(DestroydShipElimination(desirableTarget));
         }
 
-      
         private List<Vector> LockedTarget()
         {
             List<Vector> desirableTarget = new List<Vector>();
@@ -126,7 +124,7 @@ namespace Torpedo.GameElement
             desirableTarget = desirableTarget.Where(s => MainSettings.CoordinateValidation(s)).ToList();
 
             desirableTarget = desirableTarget.Where(s => !FiredShots.Contains(new FiredShot(s, true))).ToList();
-            return DestroydShipElimination(desirableTarget);
+            return desirableTarget;
         }
 
         private List<Vector> DestroydShipElimination(List<Vector> desirableTarget)
