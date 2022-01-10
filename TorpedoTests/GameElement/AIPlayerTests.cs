@@ -51,10 +51,11 @@ namespace Torpedo.GameElement.Tests
             for (int i = 0; i < MainSettings.GridWidth * MainSettings.GridHeight; i++)
             {
                 actual.FiredShots.Add(new FiredShot(actual.TakeAShot(), false));
+
             }
 
             // Assert
-            Assert.AreEqual( MainSettings.GridWidth * MainSettings.GridHeight, actual.FiredShots.Distinct().Count(),);
+            Assert.AreEqual( MainSettings.GridWidth * MainSettings.GridHeight, actual.FiredShots.Distinct().Count());
         }
 
         [TestMethod()]
@@ -187,10 +188,6 @@ namespace Torpedo.GameElement.Tests
             notExpected.Add(hitVector + Vector.Left);
             notExpected.Add(secondHitVector + Vector.Right);
             notExpected.Add(secondHitVector + Vector.Left);
-            notExpected.Add(shotVector + Vector.Right);
-            notExpected.Add(shotVector + Vector.Left);
-            notExpected.Add(secondShotVector + Vector.Right);
-            notExpected.Add(secondShotVector + Vector.Left);
             int numberOfShot = (MainSettings.GridWidth * MainSettings.GridHeight) - 8;
             // Act
             for (int i = 0; i < numberOfShot; i++)
@@ -199,7 +196,7 @@ namespace Torpedo.GameElement.Tests
             }
 
             // Assert
-            Assert.IsFalse(notExpected.Any());
+            Assert.IsFalse(notExpected.Where(ne => actual.FiredShots.Where( fS => fS.Coordinate == ne).Any()).Any());
         }
 
 

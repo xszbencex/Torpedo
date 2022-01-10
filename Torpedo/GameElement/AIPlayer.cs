@@ -88,13 +88,13 @@ namespace Torpedo.GameElement
             }
 
             Vector shot = new Vector(random.Next(MainSettings.GridWidth), random.Next(MainSettings.GridHeight));
-            while (FiredShots.Where(s => s.Coordinate == shot).Any() && destroyedShip.Where(s => s == shot).Any())
+            while (FiredShots.Where(s => s.Coordinate == shot).Any() || destroyedShip.Where(s => s == shot).Any())
             {
                 shot = new Vector(random.Next(MainSettings.GridWidth), random.Next(MainSettings.GridHeight));
             }
             if (MainSettings.CoordinateValidation(shot))
             {
-                new Exception("shot is not on the table");
+
                 return shot;
             }
             throw new Exception("shot is not on the table");
