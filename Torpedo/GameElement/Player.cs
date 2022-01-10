@@ -38,6 +38,7 @@ namespace Torpedo.GameElement
             {
                 throw new ArgumentException("Land Captain!!!!");
             }
+
             System.Diagnostics.Contracts.Contract.EndContractBlock();
 
             List<ShipPart> newShipParts = GetShipParts(shipStartPoint, shipEndPoint);

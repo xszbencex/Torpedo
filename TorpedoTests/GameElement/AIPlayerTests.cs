@@ -18,7 +18,7 @@ namespace Torpedo.GameElement.Tests
         public void PutDownAllShip__TheShipWillBePuttedDown()
         {
             // Arrange
-            AIPlayer actual = new AIPlayer("Ubul");
+            AIPlayer actual = new AIPlayer();
 
             // Act
             actual.PutDownAllShip();
@@ -32,7 +32,7 @@ namespace Torpedo.GameElement.Tests
         public void TakeAShot_FirstShot_ShotWillBeOnTheGrid()
         {
             // Arrange
-            AIPlayer ai = new AIPlayer("Ubul");
+            AIPlayer ai = new AIPlayer();
 
             // Act
             Vector actual = ai.TakeAShot();
@@ -45,7 +45,7 @@ namespace Torpedo.GameElement.Tests
         public void TakeAShot_TakeAllShots_DoNotShotAPlaceTwice()
         {
             // Arrange
-            AIPlayer actual = new AIPlayer("Ubul");
+            AIPlayer actual = new AIPlayer();
 
             // Act
             for (int i = 0; i < MainSettings.GridWidth * MainSettings.GridHeight; i++)
@@ -61,7 +61,7 @@ namespace Torpedo.GameElement.Tests
         public void TakeAShot_ifHasOnlyOneHit_DoTakeAShothNextToIt()
         {
             // Arrange
-            AIPlayer ai = new AIPlayer("Ubul");
+            AIPlayer ai = new AIPlayer();
             Vector hitVector = new Vector(4, 4);
             FiredShot hit = new FiredShot(hitVector, true);
             ai.FiredShots.Add(hit);
@@ -75,7 +75,28 @@ namespace Torpedo.GameElement.Tests
 
             // Assert
             Assert.IsTrue(direction.Contains(actual - hitVector));
+        }
 
+        [TestMethod()]
+        public void TakeAShot_ifTwoHitsNextToEachOther_TakeAshotToTheEndOfTheLine()
+        {
+            // Arrange
+            AIPlayer ai = new AIPlayer();
+            Vector hitVector = new Vector(4, 4);
+            Vector secondHitVector = new Vector(4, 3);
+            FiredShot hit = new FiredShot(hitVector, true);
+            FiredShot secondHit = new FiredShot(secondHitVector, true);
+            ai.FiredShots.Add(hit);
+            ai.FiredShots.Add(secondHit);
+            List<Vector> expected = new List<Vector>();
+            expected.Add(new Vector(4, 5));
+            expected.Add(new Vector(4, 2));
+
+            // Act
+            var actual = ai.TakeAShot();
+
+            // Assert
+            Assert.IsTrue(expected.Contains(actual));
         }
     }
 }

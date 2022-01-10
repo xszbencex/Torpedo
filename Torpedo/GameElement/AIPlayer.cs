@@ -48,7 +48,7 @@ namespace Torpedo.GameElement
         public override Vector TakeAShot()
         {
             var random = new Random();
-            Vector shot = new Vector(random.Next(MainSettings.GridWidth), random.Next(MainSettings.GridHeight));
+
 
             List<Vector> desirableTarget = new List<Vector>();
 
@@ -60,16 +60,49 @@ namespace Torpedo.GameElement
                 desirableTarget.Add(s.Coordinate + Vector.Left);
             });
 
-            // Nincs Test
+            List<Vector> lockedTarget = new List<Vector>();
+
+            FiredShots.Where(s => s.Hit).ToList().ForEach(actual =>
+            {
+               if( FiredShots.Where(s => s.Hit).Any(s => s.Coordinate == (actual.Coordinate + Vector.Up)))
+                {
+                    lockedTarget.Add(actual.Coordinate - Vector.Up);
+                }
+                if (FiredShots.Where(s => s.Hit).Any(s => s.Coordinate == (actual.Coordinate + Vector.Down)))
+                {
+                    lockedTarget.Add(actual.Coordinate - Vector.Down);
+                }
+                if (FiredShots.Where(s => s.Hit).Any(s => s.Coordinate == (actual.Coordinate + Vector.Right)))
+                {
+                    lockedTarget.Add(actual.Coordinate - Vector.Right);
+                }
+                if (FiredShots.Where(s => s.Hit).Any(s => s.Coordinate == (actual.Coordinate + Vector.Left)))
+                {
+                    lockedTarget.Add(actual.Coordinate - Vector.Left);
+                }
+            });
+
+            lockedTarget = lockedTarget.Where(s => MainSettings.CoordinateValidation(s)).ToList();
+
+            lockedTarget = lockedTarget.Where(s => !FiredShots.Contains(new FiredShot(s, true))).ToList();
+
+            if (lockedTarget.Count != 0)
+            {
+                return lockedTarget[random.Next(lockedTarget.Count)];
+            }
+
+
+
             desirableTarget = desirableTarget.Where(s => MainSettings.CoordinateValidation(s)).ToList();
 
-            // Nincs Test
             desirableTarget = desirableTarget.Where(s => !FiredShots.Contains(new FiredShot(s, true))).ToList();
 
             if (desirableTarget.Count != 0)
             {
                 return desirableTarget[random.Next(desirableTarget.Count)];
             }
+
+            Vector shot = new Vector(random.Next(MainSettings.GridWidth), random.Next(MainSettings.GridHeight));
 
             while (FiredShots.Where(s => s.Coordinate == shot).Any())
             {
@@ -81,5 +114,7 @@ namespace Torpedo.GameElement
             }
             throw new Exception("shot is not on the table");
         }
+
+        
     }
 }
