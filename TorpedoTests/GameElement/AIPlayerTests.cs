@@ -152,8 +152,8 @@ namespace Torpedo.GameElement.Tests
             ai.FiredShots.Add(shot);
             ai.FiredShots.Add(secondShot);
             List<Vector> expected = new List<Vector>();
-            expected.Add(shotVector + Vector.Right);
-            expected.Add(shotVector + Vector.Left);
+            expected.Add(hitVector + Vector.Right);
+            expected.Add(hitVector + Vector.Left);
 
 
             // Act

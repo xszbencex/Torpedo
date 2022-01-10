@@ -49,9 +49,64 @@ namespace Torpedo.GameElement
         public override Vector TakeAShot()
         {
             var random = new Random();
+            var desirableTarget = new List<Vector>();
+            var destroyedShip = new List<Vector>();
 
-            List<Vector> desirableTarget = LockedTarget();
+            List<FiredShot> hits = FiredShots.Where(s => s.Hit).ToList();
 
+            if (hits.Any())
+            {
+                foreach (var hit in hits)
+                {
+                    foreach (Vector direction in _directions)
+                    {
+                        if (hits.Where(s => s.Coordinate == (hit.Coordinate + direction)).Any())
+                        {
+                            List<Vector> target = new List<Vector>();
+                            target.Add(hit.Coordinate - direction);
+                            if (InValidTargetElimination(target).Any())
+                            {
+                                return target.First();
+                            }
+                            destroyedShip.Add(hit.Coordinate + (new Vector(direction.Y, direction.X)));
+                            destroyedShip.Add(hit.Coordinate + (new Vector(direction.Y, direction.X) * -1));
+                        }
+                    }
+                }
+ 
+                foreach (Vector direction in _directions)
+                {
+                    hits.ToList().ForEach(h => desirableTarget.Add(h.Coordinate + direction));
+                }
+            }
+            desirableTarget = InValidTargetElimination(desirableTarget);
+            desirableTarget.RemoveAll(destroyedShip.Contains);
+
+            if (desirableTarget.Count != 0)
+            {
+                return desirableTarget[random.Next(desirableTarget.Count)];
+            }
+
+            Vector shot = new Vector(random.Next(MainSettings.GridWidth), random.Next(MainSettings.GridHeight));
+            while (FiredShots.Where(s => s.Coordinate == shot).Any() && destroyedShip.Where(s => s == shot).Any())
+            {
+                shot = new Vector(random.Next(MainSettings.GridWidth), random.Next(MainSettings.GridHeight));
+            }
+            if (MainSettings.CoordinateValidation(shot))
+            {
+                return shot;
+            }
+            throw new Exception("shot is not on the table");
+        }
+
+        private List<Vector> InValidTargetElimination(List<Vector> desirableTarget)
+        {
+            desirableTarget = desirableTarget.Where(s => MainSettings.CoordinateValidation(s)).ToList();
+
+            desirableTarget = desirableTarget.Where(s => !FiredShots.Contains(new FiredShot(s, true))).ToList();
+            return desirableTarget;
+        }
+        /*
             if (desirableTarget.Count != 0)
             {
                 return desirableTarget[random.Next(desirableTarget.Count)];
@@ -165,12 +220,13 @@ namespace Torpedo.GameElement
                 }
                 else
                 {
-                  
+
                     return true;
                 }
             }
             return false;
 
         }
+        */
     }
 }
