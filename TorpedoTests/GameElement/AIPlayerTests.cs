@@ -135,7 +135,7 @@ namespace Torpedo.GameElement.Tests
             Assert.IsFalse(notExpected.Contains(actual));
         }
         [TestMethod()]
-        public void TakeAShot_TherIsADistroydShip_ASD()
+        public void TakeAShot_TherIsAHitWhitTowFierdShotNextoIt_TakeARandomShot()
         {
             // Arrange
             AIPlayer ai = new AIPlayer();
@@ -162,5 +162,46 @@ namespace Torpedo.GameElement.Tests
             // Assert
             Assert.IsTrue(expected.Contains(actual));
         }
+
+        [TestMethod()]
+        public void TakeAShot_TherIsADistroydShip_ItWillNotTakeShotNextoIt()
+        {
+            // Arrange
+            AIPlayer actual = new AIPlayer();
+            Vector hitVector = new Vector(4, 4);
+            Vector secondHitVector = new Vector(4, 3);
+            Vector shotVector = new Vector(4, 5);
+            Vector secondShotVector = new Vector(4, 2);
+
+            FiredShot hit = new FiredShot(hitVector, true);
+            FiredShot secondHit = new FiredShot(secondHitVector, true);
+
+            FiredShot shot = new FiredShot(shotVector, false);
+            FiredShot secondShot = new FiredShot(secondShotVector, false);
+            actual.FiredShots.Add(hit);
+            actual.FiredShots.Add(secondHit);
+            actual.FiredShots.Add(shot);
+            actual.FiredShots.Add(secondShot);
+            List<Vector> notExpected = new List<Vector>();
+            notExpected.Add(hitVector + Vector.Right);
+            notExpected.Add(hitVector + Vector.Left);
+            notExpected.Add(secondHitVector + Vector.Right);
+            notExpected.Add(secondHitVector + Vector.Left);
+            notExpected.Add(shotVector + Vector.Right);
+            notExpected.Add(shotVector + Vector.Left);
+            notExpected.Add(secondShotVector + Vector.Right);
+            notExpected.Add(secondShotVector + Vector.Left);
+            int numberOfShot = (MainSettings.GridWidth * MainSettings.GridHeight) - 8;
+            // Act
+            for (int i = 0; i < numberOfShot; i++)
+            {
+                actual.FiredShots.Add(new FiredShot(actual.TakeAShot(), false));
+            }
+
+            // Assert
+            Assert.IsFalse(notExpected.Any());
+        }
+
+
     }
 }

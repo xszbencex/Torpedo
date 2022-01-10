@@ -94,6 +94,7 @@ namespace Torpedo.GameElement
             }
             if (MainSettings.CoordinateValidation(shot))
             {
+                new Exception("shot is not on the table");
                 return shot;
             }
             throw new Exception("shot is not on the table");
