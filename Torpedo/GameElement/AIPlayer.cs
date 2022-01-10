@@ -149,11 +149,11 @@ namespace Torpedo.GameElement
 
         private bool IsPartOfDestroyedShip(Vector hit)
         {
-            return (IsShipDistroyedInTheDirection(hit, Vector.Up) && IsShipDistroyedInTheDirection(hit, Vector.Down)) ||
-                      (IsShipDistroyedInTheDirection(hit, Vector.Right) && IsShipDistroyedInTheDirection(hit, Vector.Left));
+            return (IsShipDistroyedInTheDirection(hit, Vector.Up, 0) && IsShipDistroyedInTheDirection(hit, Vector.Down, 0))
+                || (IsShipDistroyedInTheDirection(hit, Vector.Right, 0) && IsShipDistroyedInTheDirection(hit, Vector.Left, 0));
         }
 
-        private bool IsShipDistroyedInTheDirection(Vector hit, Vector direction)
+        private bool IsShipDistroyedInTheDirection(Vector hit, Vector direction, int depth)
         {
             var actual = hit + direction;
             var shot = FiredShots.Find(s => s.Coordinate == actual);
@@ -161,10 +161,11 @@ namespace Torpedo.GameElement
             {
                 if (shot.Hit)
                 {
-                   return IsShipDistroyedInTheDirection(actual, direction);
+                   return IsShipDistroyedInTheDirection(actual, direction, depth + 1);
                 }
                 else
                 {
+                  
                     return true;
                 }
             }

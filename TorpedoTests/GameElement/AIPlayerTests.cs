@@ -134,5 +134,33 @@ namespace Torpedo.GameElement.Tests
             // Assert
             Assert.IsFalse(notExpected.Contains(actual));
         }
+        [TestMethod()]
+        public void TakeAShot_TherIsADistroydShip_ASD()
+        {
+            // Arrange
+            AIPlayer ai = new AIPlayer();
+            Vector hitVector = new Vector(4, 4);
+            Vector shotVector = new Vector(4, 5);
+            Vector secondShotVector = new Vector(4, 3);
+
+            FiredShot hit = new FiredShot(hitVector, true);
+
+            FiredShot shot = new FiredShot(shotVector, false);
+            FiredShot secondShot = new FiredShot(secondShotVector, false);
+            ai.FiredShots.Add(hit);
+
+            ai.FiredShots.Add(shot);
+            ai.FiredShots.Add(secondShot);
+            List<Vector> expected = new List<Vector>();
+            expected.Add(shotVector + Vector.Right);
+            expected.Add(shotVector + Vector.Left);
+
+
+            // Act
+            var actual = ai.TakeAShot();
+
+            // Assert
+            Assert.IsTrue(expected.Contains(actual));
+        }
     }
 }
