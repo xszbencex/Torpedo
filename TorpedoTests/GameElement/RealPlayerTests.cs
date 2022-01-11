@@ -13,7 +13,6 @@ namespace Torpedo.GameElement.Tests
     [TestClass()]
     public class RealPlayerTests
     {
-       
 
         [TestMethod()]
         public void GetShipParts_Down()
@@ -33,7 +32,6 @@ namespace Torpedo.GameElement.Tests
 
             // Assert
             Assert.IsTrue(expected.All(actual.Contains) && (expected.Count == actual.Count));
-
         }
 
         [TestMethod()]
@@ -55,6 +53,29 @@ namespace Torpedo.GameElement.Tests
             // Assert
 
             Assert.IsTrue(expected.All(player.ShipsCoordinate.Contains) && (expected.Count == player.ShipsCoordinate.Count));
+            Assert.AreEqual(player.ShipCount, 1);
+        }
+
+        [TestMethod()]
+        public void PutDownAShip_PutFirstShipDown_TheShipPartsWillBeInTheShip()
+        {
+            // Arrange
+            Vector shipStartPoint = new Vector(1, 2);
+            Vector shipEndPoint = new Vector(1, 5);
+            List<ShipPart> expected = new List<ShipPart>();
+            expected.Add(new ShipPart(new Vector(1, 5)));
+            expected.Add(new ShipPart(new Vector(1, 2)));
+            expected.Add(new ShipPart(new Vector(1, 3)));
+            expected.Add(new ShipPart(new Vector(1, 4)));
+            RealPlayer player = new RealPlayer("test");
+
+            // Act
+            player.PutDownAShip(shipStartPoint, shipEndPoint);
+
+            // Assert
+
+            Assert.IsTrue(expected.All(player.ShipsCoordinate.Contains) && (expected.Count == player.ShipsCoordinate.Count));
+            Assert.IsTrue(expected.All(player.Ships[0].Parts.Contains) && (expected.Count == player.Ships[0].Parts.Count));
             Assert.AreEqual(player.ShipCount, 1);
         }
 

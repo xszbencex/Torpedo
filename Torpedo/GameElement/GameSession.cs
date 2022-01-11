@@ -110,6 +110,7 @@ namespace Torpedo.GameElement
             try
             {
                 otherPlayer.ShipsCoordinate.Where(s => s.Coordinate == shotPoint).Single().Destroyed = true;
+                otherPlayer.Ships.ForEach(s => s.Update());
                 ActualPlayer.FiredShots.Add(new FiredShot(shotPoint, true));
             }
             catch
