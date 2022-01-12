@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Torpedo.Model;
-using Torpedo.Repository;
 using Torpedo.Settings;
 namespace Torpedo.GameElement
 {
@@ -115,7 +114,6 @@ namespace Torpedo.GameElement
             try
             {
                 otherPlayer.ShipsCoordinate.Where(s => s.Coordinate == shotPoint).Single().Destroyed = true;
-                otherPlayer.Ships.ForEach(s => s.Update());
                 ActualPlayer.FiredShots.Add(new FiredShot(shotPoint, true));
             }
             catch
@@ -124,8 +122,6 @@ namespace Torpedo.GameElement
             }
             if (IsGameOver())
             {
-                Match match = new Match(Player1.Name, Player2.Name, RoundNumber, Player1.FiredShots.FindAll(shot => shot.Hit).Count, Player2.FiredShots.FindAll(shot => shot.Hit).Count, ActualPlayer.Name);
-                MatchRepository.AddMatch(match);
                 throw new GameOverExeption($"{ActualPlayer.Name} wins!");
             }
             if (RoundSwitch)
