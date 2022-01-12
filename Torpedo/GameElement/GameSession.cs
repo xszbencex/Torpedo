@@ -107,8 +107,6 @@ namespace Torpedo.GameElement
 
         private void RegisteringAShot(Vector shotPoint)
         {
-            
-
             if (ActualPlayer.FiredShots.Where(f => f.Coordinate == shotPoint).Any())
             {
                 throw new ArgumentException("You've already shot here!");
@@ -126,7 +124,13 @@ namespace Torpedo.GameElement
             }
             if (IsGameOver())
             {
-                Match match = new Match(Player1.Name, Player2.Name, RoundNumber, Player1.FiredShots.FindAll(shot => shot.Hit).Count, Player2.FiredShots.FindAll(shot => shot.Hit).Count, ActualPlayer.Name);
+                Match match = new Match(
+                    Player1.Name,
+                    Player2.Name,
+                    RoundNumber,
+                    Player1.FiredShots.FindAll(shot => shot.Hit).Count,
+                    Player2.FiredShots.FindAll(shot => shot.Hit).Count,
+                    ActualPlayer.Name);
                 MatchRepository.AddMatch(match);
                 throw new GameOverExeption($"{ActualPlayer.Name} wins!");
             }
@@ -141,7 +145,7 @@ namespace Torpedo.GameElement
             }
         }
 
-        private Player GetOtherPlayer()
+        public Player GetOtherPlayer()
         {
             return this.ActualPlayer.Equals(this.Player1) ? this.Player2 : this.Player1;
         }

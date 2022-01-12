@@ -11,32 +11,18 @@
         SizeToContent="WidthAndHeight"
         KeyUp="WindowKeyUp">
     <Grid>
-        <Grid Visibility="Hidden" Name="startingPageGrid" Width="600" Height="400" >
+        <Grid Visibility="Hidden" Name="startingPageContainer" Width="600" Height="300" >
             <Button Content="Start Game" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-140,0,0,0" Width="117" Height="40" FontSize="20" Click="Start_Click"/>
             <Button Content="Scores" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="140,0,0,0" Width="117" Height="40" FontSize="20" Click="Scores_Click"/>
         </Grid>
-        <Grid Visibility="Visible" Name="gamePageGrid">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="1*"></RowDefinition>
-                <RowDefinition Height="8*"></RowDefinition>
-            </Grid.RowDefinitions>
-
-            <Grid Grid.Row="0">
+        <StackPanel Visibility="Visible" Name="gamePageContainer">
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-
-                <StackPanel Grid.Column="1" Orientation="Horizontal">
-                    <Label VerticalAlignment="Center">Number of rounds:</Label>
-                    <TextBlock VerticalAlignment="Center" Name="numberOfRoundsTextBlock"></TextBlock>
-                </StackPanel>
-                <StackPanel Grid.Column="2" Orientation="Horizontal">
-                    <Label VerticalAlignment="Center">Ships remains:</Label>
-                    <TextBlock VerticalAlignment="Center" Name="shipsRemains"></TextBlock>
-                </StackPanel>
             </Grid>
 
             <Grid Grid.Row="1">
@@ -86,13 +72,19 @@
                     </StackPanel>
                 </StackPanel>
 
-                <StackPanel Grid.Column="1">
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
                     <Label HorizontalAlignment="Center">Actual phase:</Label>
-                    <TextBlock Name="actualPhaseText" TextAlignment="Center" Margin="0,0,0,10" FontSize="18"></TextBlock>
+                    <TextBlock Name="actualPhaseText" TextAlignment="Center" FontSize="18"></TextBlock>
                     <Label HorizontalAlignment="Center">Actual player:</Label>
                     <TextBlock Name="actualPlayerText" TextAlignment="Center" FontSize="18"></TextBlock>
                     <Label HorizontalAlignment="Center" Name="nextShipSizeLabel">Next ship size:</Label>
                     <TextBlock Name="nextShipSize" TextAlignment="Center" FontSize="18"></TextBlock>
+                    <Label HorizontalAlignment="Center">Number of rounds:</Label>
+                    <TextBlock TextAlignment="Center" FontSize="18" Name="numberOfRoundsTextBlock"></TextBlock>
+                    <Label HorizontalAlignment="Center">Ships remains:</Label>
+                    <TextBlock TextAlignment="Center" Name="shipsRemains" FontSize="18"></TextBlock>
+                    <Label HorizontalAlignment="Center">Ships destroyed:</Label>
+                    <TextBlock TextAlignment="Center" Name="shipsDestroyed" FontSize="18"></TextBlock>
                     <TextBlock TextAlignment="Center" Visibility="Visible" Name="showAIShipsLabel">Press H to show AI ships</TextBlock>
                 </StackPanel>
 
@@ -136,6 +128,6 @@
                     </StackPanel>
                 </StackPanel>
             </Grid>
-        </Grid>
+        </StackPanel>
     </Grid>
 </Window>

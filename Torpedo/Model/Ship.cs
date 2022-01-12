@@ -23,7 +23,8 @@ namespace Torpedo.Model
         {
             if (this.Parts.All(p => p.Destroyed))
             {
-                IsDestroyed = true;            }
+                IsDestroyed = true;
+            }
         }
     }
 }
