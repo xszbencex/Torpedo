@@ -73,7 +73,7 @@ namespace Torpedo.GameElement
                         }
                     }
                 }
- 
+
                 foreach (Vector direction in _directions)
                 {
                     hits.ToList().ForEach(h => desirableTarget.Add(h.Coordinate + direction));
