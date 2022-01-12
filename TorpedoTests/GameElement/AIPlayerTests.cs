@@ -137,7 +137,7 @@ namespace Torpedo.GameElement.Tests
         }
 
         [TestMethod()]
-        public void TakeAShot_TherIsAHitWhitTowFierdShotNextoIt_TakeARandomShotNextToHit()
+        public void TakeAShot_TherIsAHitWhitTowFierdShotNextoIt_TakeARandomShotNextToTheHit()
         {
             // Arrange
             AIPlayer ai = new AIPlayer();
@@ -198,7 +198,5 @@ namespace Torpedo.GameElement.Tests
             // Assert
             Assert.IsFalse(notExpected.Where(ne => actual.FiredShots.Where( fS => fS.Coordinate == ne).Any()).Any());
         }
-
-
     }
 }
