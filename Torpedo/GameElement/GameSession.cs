@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Torpedo.Model;
+using Torpedo.Repository;
 using Torpedo.Settings;
 namespace Torpedo.GameElement
 {
@@ -16,12 +17,16 @@ namespace Torpedo.GameElement
         public Vector? ShipStartPoint { get; set; }
         public bool GameOver { get; set; }
         public int Winner { get; set; }
+        public int RoundNumber { get; set; }
+        public bool RoundSwitch { get; set; }
         public GameSession(Player player1, Player player2)
         {
             this.Player1 = player1;
             this.Player2 = player2;
             this.ActualPlayer = player1;
             this.IsPuttingDownPhase = true;
+            this.RoundNumber = 1;
+            this.RoundSwitch = false;
         }
         /// <summary>
         /// !!!!Nincs tesztelve hogy a kordináták a táblán vannak e és egy vonalban vannak e
@@ -102,6 +107,16 @@ namespace Torpedo.GameElement
 
         private void RegisteringAShot(Vector shotPoint)
         {
+            if (RoundSwitch)
+            {
+                RoundNumber++;
+                RoundSwitch = !RoundSwitch;
+            }
+            else
+            {
+                RoundSwitch = !RoundSwitch;
+            }
+
             if (ActualPlayer.FiredShots.Where(f => f.Coordinate == shotPoint).Any())
             {
                 throw new ArgumentException("You've already shot here!");
@@ -119,6 +134,8 @@ namespace Torpedo.GameElement
             }
             if (IsGameOver())
             {
+                Match match = new Match(Player1.Name, Player2.Name, RoundNumber, Player1.Hits, Player2.Hits, ActualPlayer.Name);
+                MatchRepository.AddMatch(match);
                 throw new GameOverExeption($"{ActualPlayer.Name} wins!");
             }
         }

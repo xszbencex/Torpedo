@@ -17,6 +17,7 @@ namespace Torpedo.Model
 
         public Match(string player1Name, string player2Name, int rounds, int player1Hits, int player2Hits, string winner)
         {
+            this.Player1Name = player1Name;
             this.Player2Name = player2Name;
             this.Rounds = rounds;
             this.Player1Hits = player1Hits;
