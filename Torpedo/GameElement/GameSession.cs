@@ -107,15 +107,7 @@ namespace Torpedo.GameElement
 
         private void RegisteringAShot(Vector shotPoint)
         {
-            if (RoundSwitch)
-            {
-                RoundNumber++;
-                RoundSwitch = !RoundSwitch;
-            }
-            else
-            {
-                RoundSwitch = !RoundSwitch;
-            }
+            
 
             if (ActualPlayer.FiredShots.Where(f => f.Coordinate == shotPoint).Any())
             {
@@ -134,9 +126,18 @@ namespace Torpedo.GameElement
             }
             if (IsGameOver())
             {
-                Match match = new Match(Player1.Name, Player2.Name, RoundNumber, Player1.Hits, Player2.Hits, ActualPlayer.Name);
+                Match match = new Match(Player1.Name, Player2.Name, RoundNumber, Player1.FiredShots.FindAll(shot => shot.Hit).Count, Player2.FiredShots.FindAll(shot => shot.Hit).Count, ActualPlayer.Name);
                 MatchRepository.AddMatch(match);
                 throw new GameOverExeption($"{ActualPlayer.Name} wins!");
+            }
+            if (RoundSwitch)
+            {
+                RoundNumber++;
+                RoundSwitch = !RoundSwitch;
+            }
+            else
+            {
+                RoundSwitch = !RoundSwitch;
             }
         }
 

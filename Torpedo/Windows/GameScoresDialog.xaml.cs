@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Torpedo.Model;
+using Torpedo.Repository;
 
 namespace Torpedo.Windows
 {
@@ -22,6 +24,17 @@ namespace Torpedo.Windows
         public GameScoresDialog()
         {
             InitializeComponent();
+            AddItems();
+        }
+
+        private void AddItems()
+        {
+            var matchList = MatchRepository.GetMatches();
+
+            foreach (Match match in matchList)
+            {
+                scoreGrid.Items.Add(match);
+            }
         }
     }
 }

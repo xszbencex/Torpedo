@@ -10,11 +10,12 @@
     <Grid>
         <DataGrid Name="scoreGrid">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Player 1" IsReadOnly="True" Width="3*"/>
-                <DataGridTextColumn Header="Player 2" IsReadOnly="True" Width="3*"/>
-                <DataGridTextColumn Header="Hits" IsReadOnly="True" Width="3*"/>
-                <DataGridTextColumn Header="Rounds" IsReadOnly="True" Width="3*"/>
-                <DataGridTextColumn Header="Winner" IsReadOnly="True" Width="3*"/>
+                <DataGridTextColumn Header="Player 1" IsReadOnly="True" Binding="{Binding Player1Name}" Width="3*"/>
+                <DataGridTextColumn Header="Player 2" IsReadOnly="True" Binding="{Binding Player2Name}" Width="3*"/>
+                <DataGridTextColumn Header="Rounds" IsReadOnly="True" Binding="{Binding Rounds}" Width="3*"/>
+                <DataGridTextColumn Header="Player 1 Hits" IsReadOnly="True" Binding="{Binding Player1Hits}" Width="3*"/>
+                <DataGridTextColumn Header="Player 2 Hits" IsReadOnly="True" Binding="{Binding Player2Hits}" Width="3*"/>
+                <DataGridTextColumn Header="Winner" IsReadOnly="True" Binding="{Binding Winner}" Width="3*"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
