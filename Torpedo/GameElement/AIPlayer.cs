@@ -10,7 +10,8 @@ namespace Torpedo.GameElement
 {
     public class AIPlayer : Player
     {
-        // TODO AIPlayer implementáció (csak átmásoltam a RealPlayert)
+
+        private readonly Vector[] _directions = new Vector[4] { Vector.Up, Vector.Down, Vector.Right, Vector.Left };
         public AIPlayer() : base("Bot")
         {
         }
@@ -72,7 +73,7 @@ namespace Torpedo.GameElement
                         }
                     }
                 }
- 
+
                 foreach (Vector direction in _directions)
                 {
                     hits.ToList().ForEach(h => desirableTarget.Add(h.Coordinate + direction));
@@ -106,63 +107,5 @@ namespace Torpedo.GameElement
             desirableTarget = desirableTarget.Where(s => !FiredShots.Contains(new FiredShot(s, true))).ToList();
             return desirableTarget;
         }
-        /*
-            if (desirableTarget.Count != 0)
-            {
-                return desirableTarget[random.Next(desirableTarget.Count)];
-            }
-
-            desirableTarget = LockingOnToATarget();
-
-            if (desirableTarget.Count != 0)
-            {
-                return desirableTarget[random.Next(desirableTarget.Count)];
-            }
-
-            Vector shot = new Vector(random.Next(MainSettings.GridWidth), random.Next(MainSettings.GridHeight));
-
-            List<Vector> desirableTarget = new List<Vector>();
-
-            FiredShots
-                .Where(shot => shot.Hit == true)
-                .ToList()
-                .ForEach(s =>
-            {
-                desirableTarget.Add(s.Coordinate + Vector.Up);
-                desirableTarget.Add(s.Coordinate + Vector.Down);
-                desirableTarget.Add(s.Coordinate + Vector.Right);
-                desirableTarget.Add(s.Coordinate + Vector.Left);
-            });
-
-            // Nincs Test
-            desirableTarget = desirableTarget.Where(s => MainSettings.CoordinateValidation(s)).ToList();
-
-            // Nincs Test
-            desirableTarget = desirableTarget.Where(s => !FiredShots.Contains(new FiredShot(s, true))).ToList();
-
-            if (desirableTarget.Count != 0)
-            {
-                return desirableTarget[random.Next(desirableTarget.Count)];
-            }
-
-        private bool IsShipDistroyedInTheDirection(Vector hit, Vector direction, int depth)
-        {
-            var actual = hit + direction;
-            var shot = FiredShots.Find(s => s.Coordinate == actual);
-            if (shot != null)
-            {
-                if (shot.Hit)
-                {
-                   return IsShipDistroyedInTheDirection(actual, direction, depth + 1);
-                }
-                else
-                {
-
-                    return true;
-                }
-            }
-            throw new Exception("shot is not on the table");
-        }
-        */
     }
 }

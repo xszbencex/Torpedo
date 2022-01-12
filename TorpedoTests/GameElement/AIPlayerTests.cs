@@ -55,7 +55,7 @@ namespace Torpedo.GameElement.Tests
             }
 
             // Assert
-            Assert.AreEqual(actual.FiredShots.Distinct().Count(),  MainSettings.GridWidth * MainSettings.GridHeight);
+            Assert.AreEqual(MainSettings.GridWidth * MainSettings.GridHeight, actual.FiredShots.Distinct().Count());
         }
 
         [TestMethod()]
@@ -71,7 +71,6 @@ namespace Torpedo.GameElement.Tests
             direction.Add(Vector.Right);
             direction.Add(Vector.Up);
             direction.Add(Vector.Down);
-            
             // Act
             var actual = ai.TakeAShot();
 
@@ -138,7 +137,7 @@ namespace Torpedo.GameElement.Tests
         }
 
         [TestMethod()]
-        public void TakeAShot_TherIsAHitWhitTowFierdShotNextoIt_TakeAShotNextToTheHit()
+        public void TakeAShot_TherIsAHitWhitTowFierdShotNextoIt_TakeARandomShotNextToTheHit()
         {
             // Arrange
             AIPlayer ai = new AIPlayer();
@@ -190,7 +189,6 @@ namespace Torpedo.GameElement.Tests
             notExpected.Add(secondHitVector + Vector.Right);
             notExpected.Add(secondHitVector + Vector.Left);
             int numberOfShot = (MainSettings.GridWidth * MainSettings.GridHeight) - 8;
-            
             // Act
             for (int i = 0; i < numberOfShot; i++)
             {
@@ -198,7 +196,7 @@ namespace Torpedo.GameElement.Tests
             }
 
             // Assert
-            Assert.IsFalse(notExpected.Where(ne => actual.FiredShots.Where( fS => fS.Coordinate == ne).Any()).Any());
+            Assert.IsFalse(notExpected.Where(ne => actual.FiredShots.Where(fS => fS.Coordinate == ne).Any()).Any());
         }
     }
 }
