@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -82,6 +83,28 @@ namespace Torpedo.Windows
             {
                 _nextShipSize = value;
                 nextShipSize.Text = $"{_nextShipSize}";
+            }
+        }
+
+        private string _shipsDestroyed;
+        public string ShipsDestroyed
+        {
+            get { return _shipsDestroyed; }
+            set
+            {
+                _shipsDestroyed = value;
+                shipsDestroyed.Text = _shipsDestroyed;
+            }
+        }
+
+        private string _shipsRemains;
+        public string ShipsRemains
+        {
+            get { return _shipsRemains; }
+            set
+            {
+                _shipsRemains = value;
+                shipsRemains.Text = _shipsRemains;
             }
         }
 
@@ -234,8 +257,8 @@ namespace Torpedo.Windows
 
         private void ChangePage()
         {
-            startingPageGrid.Visibility = startingPageGrid.Visibility == Visibility.Visible ? Visibility.Hidden : Visibility.Visible;
-            gamePageGrid.Visibility = gamePageGrid.Visibility == Visibility.Visible ? Visibility.Hidden : Visibility.Visible;
+            startingPageContainer.Visibility = startingPageContainer.Visibility == Visibility.Visible ? Visibility.Hidden : Visibility.Visible;
+            gamePageContainer.Visibility = gamePageContainer.Visibility == Visibility.Visible ? Visibility.Hidden : Visibility.Visible;
         }
 
         private void RenderPlayerFields()
@@ -246,7 +269,6 @@ namespace Torpedo.Windows
 
         private void EndGame()
         {
-            // TODO save to database
             player1Canvas.Children.Clear();
             player2Canvas.Children.Clear();
             ChangePage();
@@ -285,6 +307,10 @@ namespace Torpedo.Windows
             this.ActualPlayerName = _gameSession.ActualPlayer.Name;
             showAIShipsLabel.Visibility = _gameSession.Player2 is AIPlayer ? Visibility.Visible : Visibility.Hidden;
             this.ActualPhase = _gameSession.IsPuttingDownPhase ? "Putting down" : "Shooting";
+            var destroyedShips = _gameSession.GetOtherPlayer().Ships.FindAll(ship => ship.IsDestroyed).ConvertAll(ship => ship.Length);
+            var remainingShips = _gameSession.GetOtherPlayer().Ships.FindAll(ship => !ship.IsDestroyed).ConvertAll(ship => ship.Length);
+            this.ShipsDestroyed = destroyedShips is null ? string.Empty : string.Join(", ", destroyedShips);
+            this.ShipsRemains = remainingShips is null ? string.Empty : string.Join(", ", remainingShips);
             if (_gameSession.IsPuttingDownPhase && _gameSession.ActualPlayer.ShipCount < MainSettings.PlayableShipsLength.Length)
             {
                 this.NextShipSize = MainSettings.PlayableShipsLength[_gameSession.ActualPlayer.ShipCount];

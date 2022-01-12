@@ -16,16 +16,31 @@ namespace Torpedo.GameElement
             this.ShipsCoordinate = new List<ShipPart>();
             this.FiredShots = new List<FiredShot>();
             this.ShipCount = 0;
+            initShips();
+        }
+
+        private void initShips()
+        {
+            Ships = new List<Ship>();
+            foreach (int length in MainSettings.PlayableShipsLength)
+            {
+                Ships.Add(new Ship(length));
+            }
         }
 
         public string Name { get; set; }
         public List<ShipPart> ShipsCoordinate { get; set; }
         public List<FiredShot> FiredShots { get; set; }
         public int ShipCount { get; set; }
+        public List<Ship> Ships { get; private set; }
         public abstract Vector TakeAShot();
 
         public void PutDownAShip(Vector shipStartPoint, Vector shipEndPoint)
         {
+            if (shipStartPoint == shipEndPoint)
+            {
+                throw new ArgumentException($"Your ship is not {MainSettings.PlayableShipsLength[ShipCount]} units long!");
+            }
             if ((shipStartPoint.X != shipEndPoint.X) && (shipStartPoint.Y != shipEndPoint.Y))
             {
                 throw new ArgumentException("The ship coordinates are not valid!");
@@ -53,6 +68,7 @@ namespace Torpedo.GameElement
                 throw new ArgumentException("You can't put ships next to each other.");
             }
             ShipsCoordinate.AddRange(newShipParts);
+            Ships[ShipCount].Parts.AddRange(newShipParts);
             ShipCount = ShipCount + 1;
         }
         public List<ShipPart> GetShipParts(Vector shipStartPoint, Vector shipEndPoint)

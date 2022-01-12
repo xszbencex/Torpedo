@@ -10,8 +10,7 @@ namespace Torpedo.GameElement
 {
     public class AIPlayer : Player
     {
-
-        private readonly Vector[] _directions = new Vector[4] { Vector.Up, Vector.Down, Vector.Right, Vector.Left };
+        // TODO AIPlayer implementáció (csak átmásoltam a RealPlayert)
         public AIPlayer() : base("Bot")
         {
         }
@@ -122,92 +121,29 @@ namespace Torpedo.GameElement
 
             Vector shot = new Vector(random.Next(MainSettings.GridWidth), random.Next(MainSettings.GridHeight));
 
-            while (FiredShots.Where(s => s.Coordinate == shot).Any())
-            {
-                shot = new Vector(random.Next(MainSettings.GridWidth), random.Next(MainSettings.GridHeight));
-            }
-            if (MainSettings.CoordinateValidation(shot))
-            {
-                return shot;
-            }
-            throw new Exception("shot is not on the table");
-        }
-
-        private List<Vector> LockingOnToATarget()
-        {
             List<Vector> desirableTarget = new List<Vector>();
+
             FiredShots
                 .Where(shot => shot.Hit == true)
                 .ToList()
                 .ForEach(s =>
             {
-                foreach (Vector direction in _directions)
-                {
-                    desirableTarget.Add(s.Coordinate + direction);
-                }
+                desirableTarget.Add(s.Coordinate + Vector.Up);
+                desirableTarget.Add(s.Coordinate + Vector.Down);
+                desirableTarget.Add(s.Coordinate + Vector.Right);
+                desirableTarget.Add(s.Coordinate + Vector.Left);
             });
 
+            // Nincs Test
             desirableTarget = desirableTarget.Where(s => MainSettings.CoordinateValidation(s)).ToList();
 
+            // Nincs Test
             desirableTarget = desirableTarget.Where(s => !FiredShots.Contains(new FiredShot(s, true))).ToList();
 
-            return InValidTargetElimination(DestroydShipElimination(desirableTarget));
-        }
-
-        private List<Vector> LockedTarget()
-        {
-            List<Vector> desirableTarget = new List<Vector>();
-
-            FiredShots
-                .Where(s => s.Hit)
-                .ToList()
-                .ForEach(actual =>
+            if (desirableTarget.Count != 0)
             {
-                List<FiredShot> Hits = FiredShots.Where(s => s.Hit).ToList();
-                foreach (Vector direction in _directions)
-                {
-                    if (Hits.Any(s => s.Coordinate == (actual.Coordinate + direction)))
-                    {
-                        desirableTarget.Add(actual.Coordinate - direction);
-                    }
-                }
-            });
-            return InValidTargetElimination(desirableTarget);
-        }
-
-        private List<Vector> InValidTargetElimination(List<Vector> desirableTarget)
-        {
-            desirableTarget = desirableTarget.Where(s => MainSettings.CoordinateValidation(s)).ToList();
-
-            desirableTarget = desirableTarget.Where(s => !FiredShots.Contains(new FiredShot(s, true))).ToList();
-            return desirableTarget;
-        }
-
-        private List<Vector> DestroydShipElimination(List<Vector> desirableTarget)
-        {
-            List<Vector> destroyedShip = new List<Vector>();
-            List<Vector> hits = FiredShots
-                .Where(s => s.Hit)
-                .Select(s => s.Coordinate).ToList();
-            foreach (Vector hit in hits)
-            {
-                if (IsPartOfDestroyedShip(hit))
-                {
-                    foreach(Vector direction in _directions)
-                    {
-                        destroyedShip.Add(hit + direction);
-                    }
-                }
+                return desirableTarget[random.Next(desirableTarget.Count)];
             }
-            desirableTarget = desirableTarget.Where(s => !destroyedShip.Contains(s)).ToList();
-            return desirableTarget;
-        }
-
-        private bool IsPartOfDestroyedShip(Vector hit)
-        {
-            return (IsShipDistroyedInTheDirection(hit, Vector.Up, 0) && IsShipDistroyedInTheDirection(hit, Vector.Down, 0))
-                || (IsShipDistroyedInTheDirection(hit, Vector.Right, 0) && IsShipDistroyedInTheDirection(hit, Vector.Left, 0));
-        }
 
         private bool IsShipDistroyedInTheDirection(Vector hit, Vector direction, int depth)
         {
@@ -225,8 +161,7 @@ namespace Torpedo.GameElement
                     return true;
                 }
             }
-            return false;
-
+            throw new Exception("shot is not on the table");
         }
         */
     }
