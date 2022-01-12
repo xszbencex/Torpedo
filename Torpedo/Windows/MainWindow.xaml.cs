@@ -279,7 +279,7 @@ namespace Torpedo.Windows
         {
             player1Name.Text = _gameSession.Player1.Name;
             player2Name.Text = _gameSession.Player2.Name;
-            this.NumberOfRounds = 0;
+            this.NumberOfRounds = _gameSession.RoundNumber;
             this.Player1Hits = _gameSession.Player1.FiredShots.FindAll(shot => shot.Hit).Count;
             this.Player2Hits = _gameSession.Player2.FiredShots.FindAll(shot => shot.Hit).Count;
             this.ActualPlayerName = _gameSession.ActualPlayer.Name;
