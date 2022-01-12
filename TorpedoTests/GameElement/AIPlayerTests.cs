@@ -135,8 +135,9 @@ namespace Torpedo.GameElement.Tests
             // Assert
             Assert.IsFalse(notExpected.Contains(actual));
         }
+
         [TestMethod()]
-        public void TakeAShot_TherIsAHitWhitTowFierdShotNextoIt_TakeARandomShot()
+        public void TakeAShot_TherIsAHitWhitTowFierdShotNextoIt_TakeARandomShotNextToHit()
         {
             // Arrange
             AIPlayer ai = new AIPlayer();
@@ -155,7 +156,6 @@ namespace Torpedo.GameElement.Tests
             List<Vector> expected = new List<Vector>();
             expected.Add(hitVector + Vector.Right);
             expected.Add(hitVector + Vector.Left);
-
 
             // Act
             var actual = ai.TakeAShot();
