@@ -55,7 +55,7 @@ namespace Torpedo.GameElement.Tests
             }
 
             // Assert
-            Assert.AreEqual( MainSettings.GridWidth * MainSettings.GridHeight, actual.FiredShots.Distinct().Count());
+            Assert.AreEqual(MainSettings.GridWidth * MainSettings.GridHeight, actual.FiredShots.Distinct().Count());
         }
 
         [TestMethod()]
@@ -196,7 +196,7 @@ namespace Torpedo.GameElement.Tests
             }
 
             // Assert
-            Assert.IsFalse(notExpected.Where(ne => actual.FiredShots.Where( fS => fS.Coordinate == ne).Any()).Any());
+            Assert.IsFalse(notExpected.Where(ne => actual.FiredShots.Where(fS => fS.Coordinate == ne).Any()).Any());
         }
     }
 }
