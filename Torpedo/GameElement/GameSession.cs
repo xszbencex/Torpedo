@@ -107,7 +107,6 @@ namespace Torpedo.GameElement
 
         private void RegisteringAShot(Vector shotPoint)
         {
-            
 
             if (ActualPlayer.FiredShots.Where(f => f.Coordinate == shotPoint).Any())
             {

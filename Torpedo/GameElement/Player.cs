@@ -37,6 +37,10 @@ namespace Torpedo.GameElement
 
         public void PutDownAShip(Vector shipStartPoint, Vector shipEndPoint)
         {
+            if (shipStartPoint == shipEndPoint)
+            {
+                throw new ArgumentException($"Your ship is not {MainSettings.PlayableShipsLength[ShipCount]} units long!");
+            }
             if ((shipStartPoint.X != shipEndPoint.X) && (shipStartPoint.Y != shipEndPoint.Y))
             {
                 throw new ArgumentException("The ship coordinates are not valid!");
