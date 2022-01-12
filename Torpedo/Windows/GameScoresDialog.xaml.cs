@@ -29,7 +29,7 @@ namespace Torpedo.Windows
 
         private void AddItems()
         {
-            var matchList = MatchRepository.GetMatches();
+            var matchList = MatchRepository.GetMatches().Reverse();
 
             foreach (Match match in matchList)
             {

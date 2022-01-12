@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Torpedo"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="Leaderboard" Height="550" Width="600">
+        Title="Match History" Height="550" Width="600">
     <Grid>
         <DataGrid Name="scoreGrid">
             <DataGrid.Columns>
