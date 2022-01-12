@@ -111,7 +111,6 @@ namespace Torpedo.Windows
         public MainWindow()
         {
             InitializeComponent();
-            DummyInitializeGame();
         }
 
         private void Start_Click(object sender, RoutedEventArgs e)
@@ -476,14 +475,6 @@ namespace Torpedo.Windows
         private Canvas GetEnemyPlayerCanvas()
         {
             return _gameSession.ActualPlayer.Equals(_gameSession.Player1) ? player2Canvas : player1Canvas;
-        }
-
-        private void DummyInitializeGame()
-        {
-            var player1 = new RealPlayer("Joci");
-            _gameSession = new GameSession(player1, new AIPlayer());
-            SetTextBlocks();
-            RenderPlayerFields();
         }
     }
 }
