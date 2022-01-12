@@ -246,6 +246,7 @@ namespace Torpedo.Windows
 
         private void EndGame()
         {
+            // TODO save to database
             player1Canvas.Children.Clear();
             player2Canvas.Children.Clear();
             ChangePage();

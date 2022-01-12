@@ -11,7 +11,7 @@ namespace Torpedo.Settings
     public static class MainSettings
     {
         public const int GridHeight = 10, GridWidth = 10;
-        public static readonly int[] PlayableShipsLength = new int[] { 2 };
+        public static readonly int[] PlayableShipsLength = new int[] { 4, 4, 3, 2 };
         public static readonly Brush DefaultFieldColor = Brushes.Transparent;
         public static readonly Brush DefaultFieldStrokeColor = Brushes.Black;
         public static readonly Brush ShipColor = Brushes.Blue;
