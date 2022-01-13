@@ -12,7 +12,7 @@ namespace Torpedo.GameElement
     {
 
         private readonly Vector[] _directions = new Vector[4] { Vector.Up, Vector.Down, Vector.Right, Vector.Left };
-        public AIPlayer() : base("Bot")
+        public AIPlayer() : base("AI")
         {
         }
 
